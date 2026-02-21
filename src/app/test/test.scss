@@ -1,0 +1,71 @@
+.controlBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.selAlphabet {
+  width: 160px;
+  // height: 48px;
+}
+.generateText {
+  margin-top: 9px;
+}
+
+.actionContent {
+  padding-top: 20px;
+}
+.sampleTextContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  flex-wrap: wrap;
+}
+
+.sampleCodeBlock {
+  display: inline-block;
+  margin: 0 5px;
+}
+.testCodeBlock {
+  display: inline-block;
+  width: 35px;
+
+}
+.sampleCodeChar {
+  display: block;
+  width: 35px;
+  // margin-bottom: 10px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 24px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.sampleCodeCharHidden {
+  opacity: 0;
+}
+
+.testCodeChar {
+  display: block;
+  width: 35px;
+  margin-bottom: 10px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.testCodeChar input {
+  width: 30px;
+  font-size: 20px;
+  text-align: center;
+}
+.sampleCodeBlockSeparator {
+  display: inline-block;
+  border: none;
+  width: 40px;
+}
+.isPlayingCode {
+  font-weight: bold;
+  color: red;
+}

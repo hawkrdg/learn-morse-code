@@ -1,0 +1,45 @@
+<mat-sidenav-container class="wrapper">
+  <mat-sidenav-content>
+
+    <!-- banner... -->
+    <mat-toolbar>
+      <h2 class="bannerText">{{title()}}</h2>
+      <app-theme-switcher></app-theme-switcher>
+    </mat-toolbar>
+
+    <!-- main tabs -->
+    <mat-tab-group #mainTabs [(selectedIndex)]="tabIdx" (selectedTabChange)="tabChangeHandler()">
+  
+      <mat-tab label="The Code"> 
+        <div class="mainContent">
+          <app-the-code></app-the-code>
+        </div>
+      </mat-tab>
+  
+      <mat-tab label="Listen to Code"> 
+        <div class="mainContent">
+          <app-listen></app-listen>
+        </div>
+      </mat-tab>
+  
+      <mat-tab label="Test Your Listening Knowledge">
+        <div class="mainContent">
+          <app-test></app-test>
+        </div>
+      </mat-tab>
+      
+      <mat-tab label="Test Your Fist">
+        <div class="mainContent">
+          <app-send></app-send>
+        </div>
+      </mat-tab>
+    
+      <mat-tab label="About">
+        <div class="mainContent">
+          <app-about></app-about>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  
+  </mat-sidenav-content>
+</mat-sidenav-container>

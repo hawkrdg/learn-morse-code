@@ -1,0 +1,44 @@
+<div class="transportContainer">
+  <div class="controlContainer">
+    <button matIconButton matTooltip="Toggle Audio..." (click)="data.toggleAudioPower()">
+      <mat-icon>power_settings_new</mat-icon>
+    </button>
+    <div class="led" [class]="data.audioPower() ? 'led-on' : 'led-off'"></div>
+  </div>
+
+  <div class="controlContainer">
+    <div class="hasSlider" matTooltip="Set Word/Min. Speed...">
+      WPM ({{data.wpm}})
+    </div>
+    <mat-slider min="5" max="25" step="1.0" discrete="true" matTooltip="Set Word/Min. Speed...">
+      <input matSliderThumb [(ngModel)]="data.wpm" (valueChange)="data.updateWPM()">
+    </mat-slider>
+  </div>
+
+  <div class="controlContainer">
+    <div class="hasSlider" matTooltip="Set Volume...">
+      Vol. ({{data.volume}})
+    </div>
+    <mat-slider min="0.0" max="100.0" step="0.05" discrete="true" matTooltip="Set Volume...">
+      <input matSliderThumb [(ngModel)]="data.volume">
+    </mat-slider>
+  </div>
+
+  <div class="controlContainer">
+    <button matIconButton aria-label="Replay from beginning..." (click)="replayFromBeginning()">
+      <mat-icon matTooltip="Replay from beginning...">skip_previous</mat-icon>
+    </button>
+    <!-- <button matIconButton aria-label="Replay last word...">
+      <mat-icon matTooltip="Replay last word...">skip_previous</mat-icon>
+    </button> -->
+    <button matIconButton aria-label="Play..." (click)="data.playCode(data.sampleTextCode)">
+      <mat-icon matTooltip="Play...">play_arrow</mat-icon>
+    </button>
+    <button matIconButton aria-label="Pause..." (click)="data.audioCtx.suspend()">
+      <mat-icon matTooltip="Pause...">pause</mat-icon>
+    </button>
+    <!-- <button matIconButton aria-label="Play next word...">
+      <mat-icon matTooltip="Play next word...">skip_next</mat-icon>
+    </button> -->
+  </div>
+</div>

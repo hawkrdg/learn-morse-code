@@ -1,0 +1,34 @@
+.alphabetContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
+  padding: 10px 0;
+}
+.codeChar {
+  display: inline-block;
+  width: 100px;
+  text-align: left;
+  margin: 5px;
+  padding: 2px 5px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.codeCharContainer {
+  color: red;
+  font-weight: bold;
+}
+.codeRule {
+  display: inline-block;
+  // width: 80px;
+  text-align: left;
+  margin: 5px;
+  padding: 2px 5px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.codeRuleContainer {
+  // color: red;
+  font-weight: bold;
+  padding-right: 5px;
+}

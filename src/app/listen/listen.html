@@ -1,0 +1,34 @@
+          <div class="controlBar">
+            <mat-form-field floatLabel="always" class="selAlphabet">
+              <mat-label>Choose the Alphabet...</mat-label>
+              <mat-select #selAlphabet panelClass="'panel'" [(value)]="data.characterMode" (selectionChange)="data.updateAlphabet($event.value)">
+                @for (alpha of data.alphaOptions; track $index; let idx = $index) {
+                  <mat-option [value]="alpha">{{alpha.display}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button class="generateText" matTooltip="Generate Random Characters..." (click)="data.generateSampleText(data.blockCount)">
+              Generate
+            </button>
+            
+            <app-transport1></app-transport1>
+          </div>
+
+          <div class="actionContent">
+            <!-- {{data.sampleText}} Idx: {{data.currentPlayIndex()}} -->
+            <div class="sampleTextContainer">
+              @for (bCnt of data.blockCountIndex; track bCnt) {
+                <div class="sampleCodeBlock">
+                  @for (dCnt of [0, 1, 2, 3, 4]; track dCnt) {
+                    <div class="sampleCodeChar" [class.isPlayingCode]="data.currentPlayIndex() === dCnt + (bCnt * 5) + bCnt">
+                      {{data.sampleTextArray[dCnt + (bCnt * 5) + bCnt]}}
+                    </div>
+                  }
+                  @if (bCnt < data.blockCountIndex.length - 1) {
+                    <div class="sampleCodeChar" class="sampleCodeBlockSeparator"></div>
+                  }
+                </div>
+              }
+            </div>
+          </div>

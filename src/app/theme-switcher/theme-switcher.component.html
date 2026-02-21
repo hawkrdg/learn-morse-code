@@ -1,0 +1,14 @@
+<span class="themeSwitcher">
+  <mat-form-field floatLabel="always">
+    <mat-label>Set Theme...</mat-label>
+    <mat-select #selTheme panelClass="'panel'" [(value)]="currentTheme" (selectionChange)="setTheme($event)">
+      @for (theme of themes; track theme; let idx = $index) {
+        <mat-option [value]="theme">{{theme}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button (click)="toggleLightDark()">
+    {{currentLightDark() == 'lightTheme' ? 'Go Dark' : 'Go Light'}}
+  </button>
+</span>

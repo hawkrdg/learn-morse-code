@@ -1,0 +1,66 @@
+//--banner...
+//
+mat-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 80px;
+  font-size: 16px;
+}
+
+.controlBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.selAlphabet {
+  width: 160px;
+  // height: 48px;
+}
+.generateText {
+  margin-top: 9px;
+}
+
+.mainContent {
+  width: 100vw;
+  height: calc(100vh - 140px);
+  padding: 15px 20px;
+}
+.actionContent {
+  padding-top: 20px;
+}
+.sampleTextContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  flex-wrap: wrap;
+}
+
+button {
+  margin: 0;
+}
+
+.sampleCodeBlock {
+  display: inline-block;
+  margin: 0 5px;
+}
+.sampleCodeChar {
+  display: inline-block;
+  width: 35px;
+  margin-bottom: 10px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 24px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+.sampleCodeBlockSeparator {
+  display: inline-block;
+  border: none;
+  width: 40px;
+}
+.isPlayingCode {
+  font-weight: bold;
+  color: red;
+}

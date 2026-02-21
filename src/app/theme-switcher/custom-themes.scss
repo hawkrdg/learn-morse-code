@@ -1,0 +1,290 @@
+@use '@angular/material' as mat;
+
+//-- material custom themes...
+//
+@use "./themes/BlueGreyTheme.scss" as blue-grey-theme;
+@use "./themes/BrickTheme.scss" as brick-theme;
+@use "./themes/GreenTheme.scss" as green-theme;
+@use "./themes/GreyTheme.scss" as grey-theme;
+@use "./themes/KhakiTheme.scss" as khaki-theme;
+@use "./themes/OliveTheme.scss" as olive-theme;
+
+:root {
+  .blueGreyTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: blue-grey-theme.$primary-palette,
+        tertiary: blue-grey-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+  
+  .brickTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: brick-theme.$primary-palette,
+        tertiary: brick-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+  
+  .greenTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: green-theme.$primary-palette,
+        tertiary: green-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+  
+  .greyTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: grey-theme.$primary-palette,
+        tertiary: grey-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+
+  .khakiTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: khaki-theme.$primary-palette,
+        tertiary: khaki-theme.$tertiary-palette
+        ),
+        typography: Roboto,
+        density: -1
+      ));
+    }
+      
+  .oliveTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: olive-theme.$primary-palette,
+        tertiary: olive-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+    
+  .lightTheme {
+    color-scheme: light;
+  }
+  .darkTheme {
+    color-scheme: dark;
+  }
+
+  //-- fonts...
+  //
+  //   @font-face {
+  // 	font-family: 'AlegreyaSans';
+  //   font-style: normal;
+  //   font-weight: 300;
+  //   src: url(./fonts/AlegreyaSans-Light.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'AlegreyaSans';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/AlegreyaSans-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'AlegreyaSans';
+  //   font-style: normal;
+  //   font-weight: 500;
+  //   src: url(./fonts/AlegreyaSans-Bold.woff) format('woff');
+  // }
+
+  // @font-face {
+  // 	font-family: 'AlegreyaSansSC';
+  //   font-style: normal;
+  //   font-weight: 300;
+  //   src: url(./fonts/AlegreyaSansSC-Light.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'AlegreyaSansSC';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/AlegreyaSansSC-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'AlegreyaSansSC';
+  //   font-style: normal;
+  //   font-weight: 500;
+  //   src: url(./fonts/AlegreyaSansSC-Medium.woff) format('woff');
+  // }
+
+  // @font-face {
+  // 	font-family: 'Barlow';
+  //   font-style: normal;
+  //   font-weight: 300;
+  //   src: url(./fonts/Barlow-Light.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'Barlow';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/Barlow-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'Barlow';
+  //   font-style: normal;
+  //   font-weight: 500;
+  //   src: url(./fonts/Barlow-Medium.woff) format('woff');
+  // }
+
+  // @font-face {
+  // 	font-family: 'Charm';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/Charm-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'Charm';
+  //   font-style: normal;
+  //   font-weight: 500;
+  //   src: url(./fonts/Charm-Bold.woff) format('woff');
+  // }
+
+  // @font-face {
+  // 	font-family: 'Diplomata';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/Diplomata-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'DiplomataSC';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/DiplomataSC-Regular.woff) format('woff');
+  // }
+
+  // @font-face {
+  // 	font-family: 'MPLUS1';
+  //   font-style: normal;
+  //   font-weight: 300;
+  //   src: url(./fonts/MPLUS1Code-Light.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'MPLUS1';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/MPLUS1Code-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'MPLUS1';
+  //   font-style: normal;
+  //   font-weight: 500;
+  //   src: url(./fonts/MPLUS1Code-Bold.woff) format('woff');
+  // }
+
+  @font-face {
+  	font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    src: url(./fonts/Roboto-Light.woff) format('woff');
+  }
+  @font-face {
+  	font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url(./fonts/Roboto-Regular.woff) format('woff');
+  }
+  @font-face {
+  	font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    src: url(./fonts/Roboto-Medium.woff) format('woff');
+  }
+
+  // @font-face {
+  // 	font-family: 'Tangerine';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/Tangerine-Regular.woff) format('woff');
+  // }
+  // @font-face {
+  // 	font-family: 'Tangerine';
+  //   font-style: normal;
+  //   font-weight: 500;
+  //   src: url(./fonts/Tangerine-Bold.woff) format('woff');
+  // }
+
+  //-- icons...
+  //
+  // @font-face {
+  //   font-family: 'Material Icons';
+  //   font-style: normal;
+  //   font-weight: 400;
+  //   src: url(./fonts/MaterialIcons-Regular.woff) format('woff');
+  // }
+  // .material-icons {
+  //   font-family: 'Material Icons';
+  //   font-weight: normal;
+  //   font-style: normal;
+  //   font-size: 24px;
+  //   display: inline-block;
+  //   line-height: 1;
+  //   text-transform: none;
+  //   letter-spacing: normal;
+  //   word-wrap: normal;
+  //   white-space: nowrap;
+  //   direction: ltr;
+  
+  //   /* // Support for all WebKit browsers. */
+  //   -webkit-font-smoothing: antialiased;
+  //   /* // Support for Safari and Chrome. */
+  //   text-rendering: optimizeLegibility;
+  
+  //   /* // Support for Firefox. */
+  //   -moz-osx-font-smoothing: grayscale;
+  
+  //   /* // Support for IE. */
+  //   font-feature-settings: 'liga';
+  // }
+  
+  //-- theme scroll bars...
+  //
+  * {
+    scrollbar-color: var(--mat-sys-primary) var(--mat-sys-outline-variant);
+    scrollbar-width: auto;
+  }
+  ::-webkit-scrollbar {
+    width: 19px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: var(--mat-sys-outline-variant);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--mat-sys-outline-variant);
+    border-radius: 4px;
+  }
+  
+  //-- get rid of <input type="number"> spinners...
+  // Chrome, Safari, Edge, Opera...
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  // Firefox...
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+}

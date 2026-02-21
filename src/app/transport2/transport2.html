@@ -1,0 +1,40 @@
+<div class="transportContainer">
+  <div class="controlContainer">
+    <button matIconButton matTooltip="Toggle Audio..." (click)="data.toggleAudioPower()">
+      <mat-icon>power_settings_new</mat-icon>
+    </button>
+    <div class="led" [class]="data.audioPower() ? 'led-on' : 'led-off'"></div>
+  </div>
+
+  <div class="controlContainer">
+    <div class="hasSlider" matTooltip="Set Word/Min. Speed...">
+      WPM ({{data.wpm}})
+    </div>
+    <mat-slider min="5" max="25" step="1.0" discrete="true" matTooltip="Set Word/Min. Speed...">
+      <input matSliderThumb [(ngModel)]="data.wpm" (valueChange)="data.updateWPM()">
+    </mat-slider>
+  </div>
+
+  <div class="controlContainer">
+    <div class="hasSlider" matTooltip="Set Volume...">
+      Vol. ({{data.volume}})
+    </div>
+    <mat-slider min="0.0" max="100.0" step="0.05" discrete="true" matTooltip="Set Volume...">
+      <input matSliderThumb [(ngModel)]="data.volume">
+    </mat-slider>
+  </div>
+
+  <mat-radio-group class="radioPlayMode" matTooltip="Play continually or one character at a time..." [(ngModel)]="playMode">
+    <mat-radio-button class="radioButton" [value]="'continuous'">Play All</mat-radio-button>
+    <mat-radio-button class="radioButton" [value]="'single'">Single</mat-radio-button>
+  </mat-radio-group>
+
+  <div class="controlContainer">
+    <button matIconButton aria-label="Play..." (click)="playCode()">
+      <mat-icon matTooltip="Play...">play_arrow</mat-icon>
+    </button>
+    <button matIconButton aria-label="Pause..." (click)="pause()">
+      <mat-icon matTooltip="Pause...">pause</mat-icon>
+    </button>
+  </div>
+</div>

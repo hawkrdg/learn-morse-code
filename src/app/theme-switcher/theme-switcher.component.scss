@@ -1,0 +1,16 @@
+
+.themeSwitcher {
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.themeSwitcher button {
+  margin-top: 23px;
+  margin-left: 10px;
+}
+mat-form-field {
+  height: 70px;
+  margin-top: 15px;
+  padding: 0 10px 0 0;
+}
