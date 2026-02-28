@@ -23,10 +23,24 @@ import { GlobalData } from "../services/global-data";
 export class Transport1 {
   data = inject(GlobalData);
 
-  replayFromBeginning = () => {
+  replay = async () => {
+    if (this.data.audioCtx.state === 'suspended') {
+      await this.data.audioCtx.resume();
+    }
     this.data.abortPlayback.set(true);
     setTimeout(() => {
       this.data.playCode(this.data.sampleTextCode)
     }, 2000);
+  }
+  
+  playCode = () => {
+    if (this.data.currentPlayState() != 'playing') {
+      this.data.playCode(this.data.sampleTextCode);
+    }
+  }
+
+  pause = async () => {
+    this.data.currentPlayState.set('stopped');
+    await this.data.audioCtx.suspend();
   }
 }

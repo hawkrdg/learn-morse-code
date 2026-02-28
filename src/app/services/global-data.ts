@@ -2,9 +2,13 @@ import { Injectable, signal, inject, DOCUMENT } from '@angular/core';
 
 const alphaOptions = [
   {display: 'Alpha Only ', mode: 'alpha'},
-  {display: 'AlphaNum', mode: 'alphanum'},
   {display: 'Numbers', mode: 'num'},
-  {display: 'Punctuation', mode: 'punc'},
+  {display: 'Punctuation 1', mode: 'punc1'},
+  {display: 'Punctuation 2', mode: 'punc2'},
+  {display: 'AlphaNum', mode: 'alphanum'},
+  {display: 'AlphaPunc1', mode: 'alphapunc1'},
+  {display: 'AlphaPunc2', mode: 'alphapunc2'},
+  {display: 'AlphaPunc', mode: 'alphapunc'},
   {display: 'All...', mode: 'all'}
 ];
 
@@ -50,25 +54,26 @@ const numberCode = [
   {char: '9', code: '----.'}, 
 ]
 
-const punctuationCode = [
+const punctuationCode1 = [
   {char: '.', code: '.-.-.-'},
   {char: ',', code: '--..--'}, 
   {char: '?', code: '..--..'},
-  {char: '\'', code: '.----.'}, 
+  {char: ':', code: '--...'}, 
+  {char: ';', code: '-.-.-.'}, 
   {char: '/', code: '-..-.'},
+  {char: '@', code: '.--.-.'},
+  {char: '&', code: '.-...'}
+];
+
+const punctuationCode2 = [
   {char: '(', code: '-.--.'}, 
   {char: ')', code: '-.--.-'},
-  {char: ':', code: '--...'}, 
   {char: '=', code: '-...-'},
   {char: '+', code: '.-.-.'}, 
   {char: '-', code: '-....-'},
   {char: '"', code: '.-..-.'}, 
-  {char: '@', code: '.--.-.'},
   {char: '!', code: '-.-.--'}, 
-  {char: '&', code: '.-...'},
-  {char: ';', code: '-.-.-.'}, 
   {char: '_', code: '..--.-'} 
-
 ];
 
 @Injectable({
@@ -77,17 +82,17 @@ const punctuationCode = [
 export class GlobalData {
   document = inject(DOCUMENT);
   window = document.defaultView;
+  inputs: any = this.document.getElementsByClassName('userTestInput');
   alphabet = alphaCode;
   alphaOptions = alphaOptions;
   sampleText = '';
   sampleTextArray = []
-  testInputVisibilityArray = [];
-  sampleTextIndex = [];
-  testInputIndex = [];
   sampleTextCode = [];
   sampleSingleTextCode = [];
   blockCount = 10;
   blockCountIndex = [];
+  currentPlayMode = signal('continuous')
+  currentPlayState = signal('suspended')
   currentPlayIndex = signal(0);
   abortPlayback = signal(false)
   
@@ -97,7 +102,6 @@ export class GlobalData {
   oscillator = null;
   gainNode = null;
   volume = 0.05;
-  isPlaying = signal(false);
 
   //-- code stuff (dot.ms = 1200/wpm)
   wpm = 10;
@@ -106,7 +110,7 @@ export class GlobalData {
   interChar;
   charSpace;
   wordSpace;
-  characterMode = this.alphaOptions[0];
+  characterMode = this.alphaOptions[0]; //-- refactor out
 
   //-- util...
   //
@@ -140,7 +144,7 @@ export class GlobalData {
     this.dash = 3600 / this.wpm;
     this.interChar = 1500 / this.wpm;
     this.charSpace = 3600 / this.wpm;
-    this.wordSpace = 8400 / this.wpm;
+    this.wordSpace = 8800 / this.wpm;
   }
 
   updateAlphabet = (ev) => {
@@ -149,24 +153,34 @@ export class GlobalData {
 
     switch (this.characterMode.mode) {
       case 'alpha':
-        console.log(`setting alpha`)
         this.alphabet = alphaCode;    
-        break;
-      case 'alphanum':
-        console.log(`setting alphanum`)
-        this.alphabet = alphaCode.concat(numberCode);    
         break;
       case 'num':
         this.alphabet = numberCode;    
         break;
-      case 'punc':
-        this.alphabet = punctuationCode;    
+      case 'punc1':
+        this.alphabet = punctuationCode1;    
+        break;
+      case 'punc2':
+        this.alphabet = punctuationCode2;    
+        break;
+      case 'alphanum':
+        this.alphabet = alphaCode.concat(numberCode);    
+        break;
+      case 'alphapunc1':
+        this.alphabet = alphaCode.concat(punctuationCode1);    
+        break;
+      case 'alphapunc2':
+        this.alphabet = alphaCode.concat(punctuationCode2);
+        break;
+      case 'alphapunc':
+        this.alphabet = alphaCode.concat(punctuationCode1).concat(punctuationCode2);    
         break;
       case 'all':
-        this.alphabet = alphaCode.concat(numberCode).concat(punctuationCode);    
+        this.alphabet = alphaCode.concat(numberCode).concat(punctuationCode1).concat(punctuationCode2);
         break;
     }
-    // this.generateSampleText(this.blockCount);
+    this.generateSampleText(this.blockCount);
   }
 
   //-- this promise will not resolve until audioCtx.state = 'running'...
@@ -190,8 +204,6 @@ export class GlobalData {
   delay = (ms) => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
-    }).then(() => {
-      'delay'
     });
   }
 
@@ -220,8 +232,6 @@ export class GlobalData {
   }
 
   playSingleCode = async (str) => {
-    let returnValue = 'OK';
-
     if (this.audioCtx.state === 'running') {
       for (const c of str) {
         switch (c) {
@@ -244,56 +254,55 @@ export class GlobalData {
     }
   }
 
-  playCode = async (str) => {
-    let returnValue = 'OK';
+  playCode = async (codeStr) => {
     this.abortPlayback.set(false);
 
     if (this.audioCtx.state === 'running') {
-      for (let i = 0; i < str.length; i++) {
-        //-- abort if some other event wants to stop playback...
-        //
-        if( this.abortPlayback()) {
-          returnValue = 'ABORT';
-          break
-        }
-        this.currentPlayIndex.set(i);
-        const codeStr = str[i];
+      this.currentPlayState.set('playing');
 
+      for (let i = 0; i < codeStr.length; i++) {
         //-- pause if another event sets audioCtx.state = 'suspended'
         //   this will not resolve until audioCtx.state = 'running'...
         //
         await this.waitForPlayback();
 
+        //-- abort if some other event wants to stop playback...
+        //
+        if( this.abortPlayback()) {
+          this.currentPlayState.set('stopped');
+          break
+        }
+        this.currentPlayIndex.set(i);
+        
         //-- one char at a time, break code strings into char arrays and play each one...
         //
-        const code = [...codeStr];
+        const code = [...codeStr[i]];
         for (const c of code) {
           switch (c) {
             case '.':
               await this.playDot();
               break;
-            case '-':
-              await this.playDash();
-              break;
+              case '-':
+                await this.playDash();
+                break;
             case '|':
               await this.playCharSpace();
               break;
-            case '^':
-              await this.playWordSpace();
-              break;
-            default:
-              break;
+              case '^':
+                await this.playWordSpace();
+                break;
+             default:
+                break;
           }
         }
       }
-    } else {
 
+    } else {
       //-- player was paused, this resumes play...
       //
-      this.audioCtx.resume();
-      returnValue = 'RESUME';
+      this.currentPlayState.set('playing');
+      await this.audioCtx.resume();
     };
-    return returnValue;
   }
     
   getRandomAphaIdx = (chars) => {
@@ -326,16 +335,17 @@ export class GlobalData {
   //   sampleTextCode[] - tokenize for playback: '|' = charSpace, '^' = wordSpace... 
   //   sampleSingleTextCode[] - strip '^' for single character playback
   //
-  generateSampleText = (blocks) => {
+  generateSampleText = async (blocks) => {
     this.sampleText = '';
 
     //-- clean up any current playback...
     //
     this.abortPlayback.set(true);
     if (this.audioCtx) {
-      this.audioCtx.resume();
+      await this.audioCtx.suspend();
     }
     this.currentPlayIndex.set(0);
+    this.currentPlayState.set('stopped');
 
     //-- build the string...
     //
@@ -349,9 +359,7 @@ export class GlobalData {
     //-- setup all the props...
     //
     this.sampleText = this.sampleText.trim();
-    this.sampleTextArray = [...this.sampleText];
-    this.sampleTextIndex = this.sampleTextArray.map((c, idx) => idx);
-    this.testInputVisibilityArray = this.sampleTextArray.map((c) => true);
+    
     this.sampleTextCode = this.tokenizeString(this.sampleText);
     this.sampleSingleTextCode = [];
     this.sampleTextCode.forEach(c => {
@@ -359,6 +367,12 @@ export class GlobalData {
         this.sampleSingleTextCode.push(c);
       }
     });
+  
+    for (const i of this.inputs) {
+      i.value = '';
+    }
+    this.sampleText = this.sampleText.replaceAll(' ', '');
+    this.sampleTextArray = [...this.sampleText];
 
     this.blockCountIndex = [];
     for (let i = 0; i < this.blockCount; i++) {

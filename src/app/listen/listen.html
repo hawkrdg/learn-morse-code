@@ -22,7 +22,7 @@
                 <div class="sampleCodeBlock">
                   @for (dCnt of [0, 1, 2, 3, 4]; track dCnt) {
                     <div class="sampleCodeChar" [class.isPlayingCode]="data.currentPlayIndex() === dCnt + (bCnt * 5) + bCnt">
-                      {{data.sampleTextArray[dCnt + (bCnt * 5) + bCnt]}}
+                      {{data.sampleTextArray[dCnt + (bCnt * 5)]}}
                     </div>
                   }
                   @if (bCnt < data.blockCountIndex.length - 1) {
@@ -32,3 +32,5 @@
               }
             </div>
           </div>
+
+          <div>currentPlayIndex {{data.currentPlayIndex()}}</div>

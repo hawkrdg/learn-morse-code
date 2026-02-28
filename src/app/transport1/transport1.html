@@ -25,20 +25,16 @@
   </div>
 
   <div class="controlContainer">
-    <button matIconButton aria-label="Replay from beginning..." (click)="replayFromBeginning()">
+    <button matIconButton aria-label="Replay from beginning..." (click)="replay()">
       <mat-icon matTooltip="Replay from beginning...">skip_previous</mat-icon>
     </button>
-    <!-- <button matIconButton aria-label="Replay last word...">
-      <mat-icon matTooltip="Replay last word...">skip_previous</mat-icon>
-    </button> -->
-    <button matIconButton aria-label="Play..." (click)="data.playCode(data.sampleTextCode)">
+
+    <button matIconButton aria-label="Play..." (click)="playCode()">
       <mat-icon matTooltip="Play...">play_arrow</mat-icon>
     </button>
-    <button matIconButton aria-label="Pause..." (click)="data.audioCtx.suspend()">
+
+    <button matIconButton aria-label="Pause..." (click)="pause()">
       <mat-icon matTooltip="Pause...">pause</mat-icon>
     </button>
-    <!-- <button matIconButton aria-label="Play next word...">
-      <mat-icon matTooltip="Play next word...">skip_next</mat-icon>
-    </button> -->
   </div>
 </div>

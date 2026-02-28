@@ -24,16 +24,19 @@
     </mat-slider>
   </div>
 
-  <mat-radio-group class="radioPlayMode" matTooltip="Play continually or one character at a time..." [(ngModel)]="playMode">
+  <mat-radio-group class="radioPlayMode" matTooltip="Play continually or one character at a time..." [(ngModel)]="data.currentPlayMode">
     <mat-radio-button class="radioButton" [value]="'continuous'">Play All</mat-radio-button>
     <mat-radio-button class="radioButton" [value]="'single'">Single</mat-radio-button>
   </mat-radio-group>
 
   <div class="controlContainer">
+    <button matIconButton aria-label="Replay..." (click)="replayCode()">
+      <mat-icon matTooltip="Replay...">skip_previous</mat-icon>
+    </button>
     <button matIconButton aria-label="Play..." (click)="playCode()">
       <mat-icon matTooltip="Play...">play_arrow</mat-icon>
     </button>
-    <button matIconButton aria-label="Pause..." (click)="pause()">
+    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayMode() === 'single'" (click)="pause()">
       <mat-icon matTooltip="Pause...">pause</mat-icon>
     </button>
   </div>

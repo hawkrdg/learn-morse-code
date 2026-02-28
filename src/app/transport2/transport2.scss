@@ -12,12 +12,14 @@
 }
 
 button {
-  margin: 6px 0 0;
+  margin: 6px 2px 0;
   width: 24px;
   padding: inherit 0;
   background-color: rgba(0,0,0,0) !important;
 }
-
+button:disabled {
+  background-color: var(--mat-sys-outline-variant) !important;
+}
 .led {
   display: inline-block;
   height: 14px;

@@ -24,33 +24,65 @@ import { GlobalData } from "../services/global-data";
 })
 export class Transport2 {
   data = inject(GlobalData);
-  inputs = input<any>([]);
-  currentCodeIndex = input<number>(0);
-  playMode = model('single');  //-- continuous or single
-
   
   //-- set focus to first char, if playing 'coninuous', wait 3 seconds before starting...
   //
-  playCode = () => {
-    this.inputs().first.nativeElement.focus();
-    if (this.playMode() === 'continuous') {
+  replayCode = async () => {
+    if (this.data.currentPlayMode() === 'continuous') {
+      if (!this.data.audioCtx) {
+        console.log(`No AudioContext !`);
+      }  
+  
+      if (this.data.audioCtx.state === 'suspended') {
+        await this.data.audioCtx.resume();
+      }
+      this.data.abortPlayback.set(true);
+      for (const i of this.data.inputs) {
+        i.value = '';
+      }
+      this.data.inputs[0].focus();
       setTimeout(() => {
-        this.data.playCode(this.data.sampleTextCode);
-      }, 3000);
+        this.data.playCode(this.data.sampleTextCode)
+      }, 2000);
     } else {
+      this.data.inputs[this.data.currentPlayIndex()].focus();
       setTimeout(() => {
-        this.data.playSingleCode(this.data.sampleSingleTextCode[this.currentCodeIndex()]);
-      }, 1000);
+        this.data.playSingleCode(this.data.sampleSingleTextCode[this.data.currentPlayIndex()]);
+      }, 1000);  
     }
   }
 
-  replayCode = () => {
-    this.data.playSingleCode(this.data.sampleTextCode[this.currentCodeIndex()]);
-  }
+  playCode = async () => {
+    if (!this.data.audioCtx) {
+      console.log(`No AudioContext !`);
+    }  
 
-  pause = () => {
-    if (this.playMode() === 'continuous') {
-      this.data.audioCtx.suspend();
-    }
+    if (this.data.currentPlayMode() === 'continuous') {
+      if (this.data.currentPlayState() === 'paused') {
+        this.data.inputs[this.data.currentPlayIndex()].focus();
+        setTimeout(() => {
+          this.data.playCode(this.data.sampleTextCode)
+        }, 2000);  
+      } else if (this.data.currentPlayState() === 'stopped') {
+        this.data.inputs[0].focus();
+        setTimeout(() => {
+          this.data.playCode(this.data.sampleTextCode)
+        }, 2000);  
+      }  
+    } else {
+      if (this.data.currentPlayState() === 'stopped') {
+        this.data.inputs[this.data.currentPlayIndex()].focus();
+        await this.data.audioCtx.resume();
+        this.data.currentPlayState.set('playing');
+        setTimeout(() => {
+          this.data.playSingleCode(this.data.sampleSingleTextCode[this.data.currentPlayIndex()]);
+        }, 2000);  
+      }  
+    }  
+  }  
+
+  pause = async () => {
+    await this.data.audioCtx.suspend();
+    this.data.currentPlayState.set('paused');
   }
 }

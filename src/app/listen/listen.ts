@@ -29,4 +29,7 @@ import { Transport1 } from "../transport1/transport1";
 export class Listen {
   data = inject(GlobalData);
 
+  ngOnInit() {
+    this.data.currentPlayState.set('stopped');
+  }
 }

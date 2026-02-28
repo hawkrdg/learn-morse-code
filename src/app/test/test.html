@@ -12,7 +12,7 @@
               Generate
             </button>
 
-            <app-transport2 [(playMode)]="playMode" [currentCodeIndex]="currentCodeIndex" [inputs]="inputs"></app-transport2>
+            <app-transport2></app-transport2>
           </div>
 
           <div class="actionContent">
@@ -22,14 +22,15 @@
                   @for (dCnt of [0, 1, 2, 3, 4]; track dCnt) {
                     <div class="testCodeBlock">
                       <div class="sampleCodeChar">
-                        <div class="sampleTextLetter" [class.sampleCodeCharHidden]="data.testInputVisibilityArray[dCnt + (bCnt * 5)]">
-                          {{data.sampleTextArray[dCnt + (bCnt * 5) + bCnt]}}
+                        <div class="sampleTextLetter" [class.sampleCodeCharHidden]="data.inputs[dCnt + (bCnt * 5)].value === ''">
+                          {{data.sampleTextArray[dCnt + (bCnt * 5)]}}
                         </div>
                       </div>
                       <div class="testCodeChar">
-                          <input #input id="input{{dCnt + (bCnt * 5) + bCnt}}" 
-                                (keyup.tab)="showTestChar(dCnt + (bCnt * 5) - 1)"
-                                (keyup.enter)="focusInput(dCnt + (bCnt * 5))">
+                          <input class="userTestInput" 
+                                #input id="input{{dCnt + (bCnt * 5) + bCnt}}" 
+                                (keyup.tab)="tabNextChar(dCnt + (bCnt * 5) - 1)"
+                                (keyup.enter)="enterNextChar(dCnt + (bCnt * 5))">
                       </div>
                     </div>
                   }

@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, ViewChildren, QueryList, ElementRef, DOCUMENT } from '@angular/core';
+import { Component, inject, model, ChangeDetectorRef } from '@angular/core';
 
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,14 +30,9 @@ import { Transport2 } from "../transport2/transport2";
 })
 export class Test {
   data = inject(GlobalData);
-  document = inject(DOCUMENT);
-  window = this.document.defaultView;
-  currentIndex = 0;
-  @ViewChild(Transport2) transportRef!: Transport2;
-  @ViewChildren('input') inputs!: QueryList<ElementRef>;
-  playMode = 'continuous';  //-- continuous or single
-  currentCodeIndex = 0;
-
+  
+  constructor(private cdr: ChangeDetectorRef) {}  
+  
   ngAfterViewInit() {
     this.data.sampleText = '';
     // setTimeout(() => {
@@ -45,28 +40,42 @@ export class Test {
     // }, 4000);
   }
 
-  showTestChar = (idx) => {
-    this.data.testInputVisibilityArray[idx] = false;
-  }
-
-  focusInput = (idx) => {
-    this.showTestChar(idx)
-    const newInput = this.inputs.find((x, i) => i === idx + 1);
-    newInput.nativeElement.focus()
-    if (this.playMode === 'single') {
-      console.log(`idx ${idx}`);
+  tabNextChar = (idx: number) => {
+    const newInput = this.data.inputs[idx + 1];
+    newInput.focus()
+    if (this.data.currentPlayMode() === 'single') {
+      console.log(`tab idx ${idx}`);
       setTimeout(() => {
         this.data.playSingleCode(this.data.sampleSingleTextCode[idx + 1]);
+        this.data.currentPlayIndex.set(idx + 1);
       }, 1500);
     }
   }
 
-  generateSampleText = () => {
+  enterNextChar = (idx: number) => {
+    const newInput = this.data.inputs[idx + 1];
+    newInput.focus()
+    if (this.data.currentPlayMode() === 'single') {
+      console.log(`enter idx ${idx}`);
+      setTimeout(() => {
+        this.data.playSingleCode(this.data.sampleSingleTextCode[idx + 1]);
+        this.data.currentPlayIndex.set(idx + 1);
+      }, 1500);
+    }
+  }
+
+  generateSampleText = async () => {
     this.data.sampleText = '';
     this.data.generateSampleText(this.data.blockCount)
+    await this.data.audioCtx.suspend();
+    this.data.currentPlayState.set('stopped');
+    
     setTimeout(() => {
-      this.inputs.forEach(i => i.nativeElement.value = '');
-      this.inputs.first.nativeElement.focus();
+      for (const i of this.data.inputs) {
+        i.value = '';
+      }
+      this.data.inputs[0].focus();
     }, 500);
+    this.cdr.detectChanges()
   }
 }
