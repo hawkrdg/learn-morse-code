@@ -94,7 +94,8 @@ export class GlobalData {
   currentPlayMode = signal('continuous')
   currentPlayState = signal('suspended')
   currentPlayIndex = signal(0);
-  abortPlayback = signal(false)
+  abortPlayback = signal(false);
+  audioFlag = signal(false);
   
   //-- tone generator...
   audioPower = signal(false);
@@ -139,6 +140,15 @@ export class GlobalData {
     }
   }
 
+  //-- alert user to turn on audio...
+  //
+  showNoAudioMsg = (ms) => {
+    this.audioFlag.set(true);
+    setTimeout(() => {
+      this.audioFlag.set(false);
+    }, ms);
+  }
+  
   updateWPM = () => {
     this.dot = 1200 / this.wpm;
     this.dash = 3600 / this.wpm;
@@ -188,15 +198,15 @@ export class GlobalData {
   //
   waitForPlayback = () => {
     return new Promise((resolve) => {
-      if (this.audioCtx.state === 'running') {
+      if (this.currentPlayState() === 'playing') {
         resolve(true);
       } else {
         const intervalId = setInterval(() => {
-          if (this.audioCtx.state === 'running') {
+          if (this.currentPlayState() === 'playing') {
             resolve(true);
             clearInterval(intervalId);
           }
-        }, 500);
+        }, 100);
       }
     });
   }
@@ -254,55 +264,63 @@ export class GlobalData {
     }
   }
 
-  playCode = async (codeStr) => {
+  playCode = async (codeStrArray) => {
+    let idx;
     this.abortPlayback.set(false);
 
-    if (this.audioCtx.state === 'running') {
+    if (this.audioCtx.state === 'suspended') {
+      await this.audioCtx.resume();
       this.currentPlayState.set('playing');
+    }
 
-      for (let i = 0; i < codeStr.length; i++) {
-        //-- pause if another event sets audioCtx.state = 'suspended'
-        //   this will not resolve until audioCtx.state = 'running'...
-        //
-        await this.waitForPlayback();
+    for (const i of this.inputs) {
+      i.value = '';
+    }
 
-        //-- abort if some other event wants to stop playback...
-        //
-        if( this.abortPlayback()) {
-          this.currentPlayState.set('stopped');
-          break
-        }
-        this.currentPlayIndex.set(i);
-        
-        //-- one char at a time, break code strings into char arrays and play each one...
-        //
-        const code = [...codeStr[i]];
-        for (const c of code) {
-          switch (c) {
-            case '.':
-              await this.playDot();
-              break;
-              case '-':
-                await this.playDash();
-                break;
-            case '|':
-              await this.playCharSpace();
-              break;
-              case '^':
-                await this.playWordSpace();
-                break;
-             default:
-                break;
+    for (idx = 0; idx < codeStrArray.length; idx++) {
+      this.currentPlayIndex.set(idx);
+      //-- playback paused...
+      //
+      if (this.currentPlayState() === 'paused') {
+        await this.waitForPlayback().then(
+          async data => {
+            if (this.inputs.length > 0) {
+              this.inputs[this.currentPlayIndex()].focus();
+            }
           }
+        );
+      }
+      //-- abort if some other event wants to stop playback...
+      //
+      if( this.abortPlayback()) {
+        this.currentPlayState.set('stopped');
+        break
+      }
+      
+      //-- one char at a time, break code strings into char arrays and play each one...
+      //
+      const code = codeStrArray[idx];
+      for (const c of code) {
+        switch (c) {
+          case '.':
+            await this.playDot();
+            break;
+            case '-':
+              await this.playDash();
+              break;
+          case '|':
+            await this.playCharSpace();
+            break;
+            case '^':
+              await this.playWordSpace();
+              break;
+          default:
+            break;
         }
       }
-
-    } else {
-      //-- player was paused, this resumes play...
-      //
-      this.currentPlayState.set('playing');
-      await this.audioCtx.resume();
-    };
+    }
+    this.currentPlayIndex.set(0);
+    this.currentPlayState.set('stopped');
   }
     
   getRandomAphaIdx = (chars) => {
@@ -360,14 +378,24 @@ export class GlobalData {
     //
     this.sampleText = this.sampleText.trim();
     
-    this.sampleTextCode = this.tokenizeString(this.sampleText);
+    const rawTextCode = this.tokenizeString(this.sampleText);
+
+    this.sampleTextCode = [];
     this.sampleSingleTextCode = [];
-    this.sampleTextCode.forEach(c => {
+    rawTextCode.forEach(c => {
       if (c != '^') {
+        this.sampleTextCode.push(c);
         this.sampleSingleTextCode.push(c);
       }
     });
-  
+
+    rawTextCode.forEach((c, idx) => {
+      if (c === '^') {
+        this.sampleTextCode[idx - (idx %5) - 1] += '^';
+      }
+    });
+    // this.sampleTextCode = this.tokenizeString(this.sampleText);
+    
     for (const i of this.inputs) {
       i.value = '';
     }

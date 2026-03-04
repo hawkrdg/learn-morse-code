@@ -18,6 +18,7 @@ button {
   background-color: rgba(0,0,0,0) !important;
 }
 button:disabled {
+  opacity: 0.5 !important;
   background-color: var(--mat-sys-outline-variant) !important;
 }
 .led {
@@ -48,4 +49,5 @@ button:disabled {
 .radioButton {
   height: 24px;
 }
+
 

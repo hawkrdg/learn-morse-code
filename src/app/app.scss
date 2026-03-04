@@ -64,3 +64,17 @@ button {
   font-weight: bold;
   color: red;
 }
+
+.noAudio {
+  position: absolute;
+  height: 70px;
+  width: 320px;
+  padding: 20px 30px;
+  top: calc(50vh - 70px);
+  right: calc(50vw - 160px);
+  text-align: center;
+  border: 3px solid var(--mat-sys-error) !important;
+  color: var(--mat-sys-error);
+  background-color: var(--mat-sys-background);
+  z-index: 100;
+}

@@ -31,7 +31,7 @@ import { About } from "./about/about";
 export class App {
   protected readonly title = signal('Learn Morse Code');
   data = inject(GlobalData);
-  tabIdx = signal(2);
+  tabIdx = signal(1);
   playMode;
 
   ngOnInit() {
@@ -51,7 +51,8 @@ export class App {
 
   //-- cancel any web audio stuff and release...
   //
-  tabChangeHandler = () => {
+  tabChangeHandler = async () => {
+    if (this.data.audioCtx) {
       this.data.audioPower.set(false);
       this.data.oscillator.stop();
       this.data.oscillator.disconnect();
@@ -60,5 +61,8 @@ export class App {
       this.data.gainNode = null;
       this.data.oscillator = null;
       this.data.audioCtx = null;
+    }
+    this.data.currentPlayIndex.set(0);
+    this.data.currentPlayState.set('stopped');
   }
 }

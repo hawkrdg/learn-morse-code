@@ -96,10 +96,6 @@ input {
 div {
   border-color: var(--mat-sys-primary) !important;
 }
-.hideForPrinting {
-  height: 0 !important;
-  opacity: 0 !important;
-}
 
 //-- material component overrides - this will be app-specific...
 //

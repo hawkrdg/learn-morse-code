@@ -35,9 +35,8 @@ export class Test {
   
   ngAfterViewInit() {
     this.data.sampleText = '';
-    // setTimeout(() => {
-      this.generateSampleText()
-    // }, 4000);
+    this.generateSampleText();
+    this.data.showNoAudioMsg(3000);
   }
 
   tabNextChar = (idx: number) => {

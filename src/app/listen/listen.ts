@@ -9,8 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GlobalData } from "../services/global-data";
-import { Transport1 } from "../transport1/transport1";
-
+import { Transport1 } from "../transport1/transport1"
 @Component({
   selector: 'app-listen',
   imports: [
@@ -21,7 +20,7 @@ import { Transport1 } from "../transport1/transport1";
         MatSliderModule,
         MatIconModule,
         MatTooltipModule,
-        Transport1,
+        Transport1
   ],
   templateUrl: './listen.html',
   styleUrl: './listen.scss',
@@ -30,6 +29,10 @@ export class Listen {
   data = inject(GlobalData);
 
   ngOnInit() {
-    this.data.currentPlayState.set('stopped');
+    console.log(`ngOnInit() fires...`);
+  }
+  ngAfterViewInit() {
+    console.log(`ngAfterViewInit() fires...`);
+    this.data.showNoAudioMsg(3000);
   }
 }

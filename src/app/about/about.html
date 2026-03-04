@@ -2,6 +2,7 @@
 <h3>A simple WebAPP to learn and practice morse code</h3>
 
 <p>Learn the code for letters, numbers, and punctuation. Listen to code at various WPM speeds. Test your knowledge. Plug your 'code practice oscillator' into your 'mic' jack and test your fist.</p>
+
 <p>The app has a number of tabs:</p>
 
 <ol>
@@ -14,10 +15,46 @@
 <p>While the AARL code requirements used to range from 5 WPM (novice class) to 20 WPM (extra class) this has been phased out. Yet many operators prefer CW so it is worth learning the code.</p>
 
 <h3>Choosing an Alphabet</h3>
-<p>the app has three different alphabets: alpha (letters), numbers (numbers, really), punctuation (common punctuation). Choose these from the 'Choose the Alphabet...' drop-down. Learning all three will take some time. Once you feel comfortable, choosing 'All' will generate a random mix of everything... </p>
+<p>the app has four different alphabets:
+
+<ul>
+  <li>alpha (letters)</li>
+  <li>numbers (numbers, really)</li>
+  <li>punctuation1 (common punctuation)</li>
+  <li>punctuation2 (less common punctuation)</li>
+</ul>
+   
+<p>Choose these from the 'Choose the Alphabet...' drop-down - there are a number of combinations. Learning all four will take some time but once you feel comfortable, choosing 'All' will generate a random mix of everything... </p>
 
 <h3>The 'Generate' Button</h3>
-<p>This button will generate a ten block set of random characters based on the chosen alphabet. These blocks are used both for listening and testing</p>
+<p>This button will generate a ten block set of random characters based on the chosen alphabet. The same blocks are used both for listening and testing so you can listen to a set of blocks and then test yourself against them.</p>
 
 <h3>The Audio Transports</h3>
-<p>This app's audio uses the Web Audio API for all sound. This can be resource intensive so it is only instantiated when needed. You must turn it on to listen, test, or send. It is turned off on a new 'Generate' event or any 'Tab Change' event.</p>
+<p>This app's audio uses the Web Audio API for all sound. This can be resource intensive so it is only instantiated when needed so as not to 'hog' resources from other web pages. You must turn it on to listen, test, or send. It is turned off for any 'Tab Change' event. Once the audio is turned on, the play buttons will be enabled.</p>
+
+<h3>Listen to Code</h3>
+<p>Here you can listen to random code blocks. Set the WPM speed and volume.</p>
+
+<ul>
+  <li>'Play' will start playing from the beginning...</li>
+  <li>'Pause' stops playing and 'Resume' resumes play...</li>
+  <li>'Replay' will restart playing from the beginning...</li>
+</ul>
+
+<h3>Test Your Listening Knowledge</h3>
+<p>Here you can test how well you know the code. There are two modes: 'Play All' (continuous) and 'Single' (one character at a time).</p>
+<p>All the characters are hidden until you enter what you think you heard. The cursor will move to the next hidden character when you hit &lt;enter&gt; or &lt;tab&gt;. In 'continuous' mode the code keeps on playing and it is easy to get behind. In 'single' mode the playback will not play the next character until you enter the current character - this gives you time to think on those dodgy characters. </p>
+
+<ul>
+  <li>'Play' will start playing from the beginning...</li>
+  <li>'Pause' stops playing and 'Resume' resumes play in 'continous' mode...</li>
+  <li>'Replay' will restart playing from the beginning in 'continuous' mode or will replay the current character in 'single' mode...
+  </li>
+</ul>
+
+<h3>Test Your Fist</h3>
+<p>This module is still under development...</p>
+
+<h3>Suggestions...</h3>
+<p>Start out with just the letters. When you think you know the code find a 'continuous' WPM speed that you can mostly get all the characters correctly. Practice in 'single' mode at 10 to 12 WPM. Gradually work up your 'continuous' speed to say 12 WPM. Now add the numbers and again work up your 'continuous' speed. Now add the puncuation.</p>
+<p>At this point YOU KNOW THE CODE...! Keep practicing and communicating CW...</p>

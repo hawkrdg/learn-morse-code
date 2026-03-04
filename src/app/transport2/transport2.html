@@ -24,20 +24,27 @@
     </mat-slider>
   </div>
 
-  <mat-radio-group class="radioPlayMode" matTooltip="Play continually or one character at a time..." [(ngModel)]="data.currentPlayMode">
+  <mat-radio-group class="radioPlayMode" matTooltip="Play continually or one character at a time..." [(ngModel)]="data.currentPlayMode" (change)="handlePlayModeChange()">
     <mat-radio-button class="radioButton" [value]="'continuous'">Play All</mat-radio-button>
     <mat-radio-button class="radioButton" [value]="'single'">Single</mat-radio-button>
   </mat-radio-group>
 
   <div class="controlContainer">
-    <button matIconButton aria-label="Replay..." (click)="replayCode()">
+    <button matIconButton aria-label="Replay..." [disabled]="data.currentPlayState() === 'paused' || !data.audioPower()" (click)="replayCode()">
       <mat-icon matTooltip="Replay...">skip_previous</mat-icon>
     </button>
-    <button matIconButton aria-label="Play..." (click)="playCode()">
+ 
+    <button matIconButton aria-label="Play..." [disabled]="data.currentPlayState() === 'paused' || data.currentPlayState() === 'playing' || !data.audioPower()" (click)="playCode()">
       <mat-icon matTooltip="Play...">play_arrow</mat-icon>
     </button>
-    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayMode() === 'single'" (click)="pause()">
-      <mat-icon matTooltip="Pause...">pause</mat-icon>
+ 
+    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayMode() === 'single' || !data.audioPower()" (click)="pause()">
+      @if (data.currentPlayState() === 'paused') {
+        <mat-icon matTooltip="Resume Play...">last_page</mat-icon>
+      } @else {
+        <mat-icon matTooltip="Pause...">pause</mat-icon>
+      }
     </button>
   </div>
 </div>
+

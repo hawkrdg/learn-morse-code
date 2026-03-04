@@ -17,6 +17,10 @@ button {
   padding: inherit 0;
   background-color: rgba(0,0,0,0) !important;
 }
+button:disabled {
+  opacity: 0.5 !important;
+  background-color: var(--mat-sys-outline-variant) !important;
+}
 
 .led {
   display: inline-block;
@@ -38,3 +42,4 @@ button {
   height: 25px;
   vertical-align: middle;
 }
+

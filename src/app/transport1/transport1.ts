@@ -23,24 +23,50 @@ import { GlobalData } from "../services/global-data";
 export class Transport1 {
   data = inject(GlobalData);
 
-  replay = async () => {
+  replayCode = async () => {
+    if (!this.data.audioCtx) {
+      this.data.showNoAudioMsg(2000);
+    }  
+
     if (this.data.audioCtx.state === 'suspended') {
       await this.data.audioCtx.resume();
     }
     this.data.abortPlayback.set(true);
     setTimeout(() => {
+      this.data.currentPlayState.set('playing');
       this.data.playCode(this.data.sampleTextCode)
     }, 2000);
   }
   
-  playCode = () => {
+  playCode = async () => {
+    if (!this.data.audioCtx) {
+      this.data.showNoAudioMsg(2000);
+    }  
+
+    if (this.data.audioCtx.state === 'suspended') {
+      await this.data.audioCtx.resume();
+    }
+
     if (this.data.currentPlayState() != 'playing') {
-      this.data.playCode(this.data.sampleTextCode);
+      this.data.currentPlayState.set('playing');
+      this.data.currentPlayIndex.set(0);
+      setTimeout(() => {
+        this.data.playCode(this.data.sampleTextCode)
+      }, 2000);  
     }
   }
 
   pause = async () => {
-    this.data.currentPlayState.set('stopped');
-    await this.data.audioCtx.suspend();
+    if (this.data.currentPlayState() === 'paused') {
+      this.data.currentPlayState.set('playing');
+      if (this.data.audioCtx) {
+        this.data.audioCtx.resume();
+      }
+    } else {
+      if (this.data.audioCtx) {
+        this.data.audioCtx.suspend();
+      }
+      this.data.currentPlayState.set('paused');
+    }
   }
 }
