@@ -50,31 +50,23 @@ export class Transport2 {
       this.data.showNoAudioMsg(2000);
     }  
 
-    if (this.data.currentPlayMode() === 'continuous') {
-
-      if (this.data.audioCtx.state === 'suspended') {
-        await this.data.audioCtx.resume();
-      }
-      this.data.abortPlayback.set(true);
-      for (const i of this.data.inputs) {
-        i.value = '';
-      }
-      this.data.inputs[0].focus();
-      setTimeout(() => {
-        this.data.currentPlayState.set('playing');
-        this.data.playCode(this.data.sampleTextCode);
-      }, 2000);
-    } else {
-      this.data.abortPlayback.set(true);
-      if (this.data.currentPlayState() === 'stopped' || this.data.currentPlayState() === 'paused') {
-        await this.data.audioCtx.resume();
-        this.data.currentPlayState.set('playing');
-      }
-      this.data.inputs[this.data.currentPlayIndex()].focus();
-      setTimeout(() => {
-        this.data.playSingleCode(this.data.sampleSingleTextCode[this.data.currentPlayIndex()]);
-      }, 1000);  
+    if (this.data.audioCtx.state === 'suspended') {
+      await this.data.audioCtx.resume();
     }
+    this.data.abortPlayback.set(true);
+    for (const i of this.data.inputs) {
+      i.value = '';
+    }
+    this.data.inputs[0].focus();
+    this.data.currentPlayIndex.set(0);
+    setTimeout(() => {
+      this.data.currentPlayState.set('playing');
+      if (this.data.currentPlayMode() === 'continuous') {
+        this.data.playCode(this.data.sampleTextCode);
+      } else {
+        this.data.playSingleCode(this.data.sampleSingleTextCode[0]);
+      }
+    }, 2000);
   }
 
   playCode = async () => {
@@ -89,6 +81,9 @@ export class Transport2 {
     if (this.data.currentPlayMode() === 'continuous') {
       if (this.data.currentPlayState() != 'playing') {
         this.data.currentPlayIndex.set(0);
+        for (const i of this.data.inputs) {
+          i.value = '';
+        }
         this.data.currentPlayState.set('playing');
         this.data.inputs[0].focus();
         setTimeout(() => {
@@ -96,15 +91,22 @@ export class Transport2 {
         }, 2000);  
       }
     } else {
-      this.data.abortPlayback.set(true);
-      if (this.data.currentPlayState() === 'stopped' || this.data.currentPlayState() === 'paused') {
-        this.data.inputs[this.data.currentPlayIndex()].focus();
-        await this.data.audioCtx.resume();
-        this.data.currentPlayState.set('playing');
+      if (this.data.currentPlayState() != 'playing') {
+        this.data.abortPlayback.set(true);
+        if (this.data.currentPlayState() === 'stopped' || this.data.currentPlayState() === 'paused') {
+          this.data.inputs[this.data.currentPlayIndex()].focus();
+          await this.data.audioCtx.resume();
+          this.data.currentPlayState.set('playing');
+          setTimeout(() => {
+            this.data.playSingleCode(this.data.sampleSingleTextCode[this.data.currentPlayIndex()]);
+          }, 2000);  
+        }  
+      } else {
         setTimeout(() => {
+          this.data.inputs[this.data.currentPlayIndex()].focus();
           this.data.playSingleCode(this.data.sampleSingleTextCode[this.data.currentPlayIndex()]);
-        }, 2000);  
-      }  
+        }, 1000);  
+      }
     }  
   }  
 

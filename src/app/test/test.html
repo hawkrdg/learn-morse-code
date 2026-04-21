@@ -18,7 +18,7 @@
       <div class="sampleCodeBlock">
         @for (dCnt of [0, 1, 2, 3, 4]; track dCnt) {
           <div class="testCodeBlock">
-            <div class="sampleCodeChar">
+            <div class="sampleCodeChar" [class.isPlayingCode]="data.currentPlayIndex() === dCnt + (bCnt * 5)">
               <div class="sampleTextLetter" [class.sampleCodeCharHidden]="data.inputs[dCnt + (bCnt * 5)].value === ''">
                 {{data.sampleTextArray[dCnt + (bCnt * 5)]}}
               </div>

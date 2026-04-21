@@ -31,16 +31,21 @@
 
   <div class="controlContainer">
     <button matIconButton aria-label="Replay..." [disabled]="data.currentPlayState() === 'paused' || !data.audioPower()" (click)="replayCode()">
-      <mat-icon matTooltip="Replay...">skip_previous</mat-icon>
+      <mat-icon matTooltip="Replay from beginning...">skip_previous</mat-icon>
     </button>
  
-    <button matIconButton aria-label="Play..." [disabled]="data.currentPlayState() === 'paused' || data.currentPlayState() === 'playing' || !data.audioPower()" (click)="playCode()">
-      <mat-icon matTooltip="Play...">play_arrow</mat-icon>
+    <button matIconButton aria-label="Play..." [disabled]="data.currentPlayState() === 'paused' || (data.currentPlayMode() === 'continuous' && data.currentPlayState() === 'playing') || !data.audioPower()" (click)="playCode()">
+      @if (data.currentPlayState() === 'playing' && data.currentPlayMode() === 'single') {
+        <mat-icon matTooltip="Rpeat last character...">play_arrow</mat-icon>
+      } @else {
+        <mat-icon matTooltip="Play...">play_arrow</mat-icon>
+      }
     </button>
  
-    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayMode() === 'single' || !data.audioPower()" (click)="pause()">
+    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayMode() === 'single' || data.currentPlayState() === 'stopped'" (click)="pause()">
+    <!-- <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayMode() === 'single' || !data.audioPower()" (click)="pause()"> -->
       @if (data.currentPlayState() === 'paused') {
-        <mat-icon matTooltip="Resume Play...">last_page</mat-icon>
+        <mat-icon matTooltip="Resume Play...">play_arrow</mat-icon>
       } @else {
         <mat-icon matTooltip="Pause...">pause</mat-icon>
       }

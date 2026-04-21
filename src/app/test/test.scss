@@ -34,6 +34,7 @@
 .sampleCodeChar {
   display: block;
   width: 35px;
+  height: 40px;
   // margin-bottom: 10px;
   padding: 5px 0;
   text-align: center;
@@ -42,7 +43,7 @@
   border-collapse: collapse;
 }
 .sampleCodeCharHidden {
-  opacity: 0;
+  font-size: 0;
 }
 
 .testCodeChar {
@@ -66,6 +67,5 @@
   width: 40px;
 }
 .isPlayingCode {
-  font-weight: bold;
-  color: red;
+  background-color: var(--mat-sys-error-container);
 }

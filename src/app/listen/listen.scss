@@ -43,5 +43,6 @@
 }
 .isPlayingCode {
   font-weight: bold;
-  color: red;
+  color: var(--mat-sys-on-error-container);
+  background-color: var(--mat-sys-error-container);
 }

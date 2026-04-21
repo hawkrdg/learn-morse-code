@@ -36,14 +36,12 @@ export class Test {
   ngAfterViewInit() {
     this.data.sampleText = '';
     this.generateSampleText();
-    this.data.showNoAudioMsg(3000);
   }
 
   tabNextChar = (idx: number) => {
     const newInput = this.data.inputs[idx + 1];
     newInput.focus()
     if (this.data.currentPlayMode() === 'single') {
-      console.log(`tab idx ${idx}`);
       setTimeout(() => {
         this.data.playSingleCode(this.data.sampleSingleTextCode[idx + 1]);
         this.data.currentPlayIndex.set(idx + 1);
@@ -54,27 +52,34 @@ export class Test {
   enterNextChar = (idx: number) => {
     const newInput = this.data.inputs[idx + 1];
     newInput.focus()
+
     if (this.data.currentPlayMode() === 'single') {
-      console.log(`enter idx ${idx}`);
       setTimeout(() => {
         this.data.playSingleCode(this.data.sampleSingleTextCode[idx + 1]);
         this.data.currentPlayIndex.set(idx + 1);
       }, 1500);
     }
   }
+  
 
   generateSampleText = async () => {
+    //-- make sure any playback is stopped...
+    //
+    await this.data.audioCtx.suspend();
+
+    //-- get new sample text...
+    //
     this.data.sampleText = '';
     this.data.generateSampleText(this.data.blockCount)
-    await this.data.audioCtx.suspend();
-    this.data.currentPlayState.set('stopped');
     
+    //-- clear testing inputs and set focus to start...
+    //
     setTimeout(() => {
       for (const i of this.data.inputs) {
         i.value = '';
       }
       this.data.inputs[0].focus();
+      this.cdr.detectChanges()
     }, 500);
-    this.cdr.detectChanges()
   }
 }

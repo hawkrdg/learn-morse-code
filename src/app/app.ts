@@ -42,16 +42,37 @@ export class App {
     console.log(`ngAfterViewInit() fires...`);
     this.data.updateWPM();
     this.data.updateAlphabet(this.data.alphaOptions[0]);
+    this.changeMainTab(1);
   }
 
   changeMainTab = (idx) => {
     console.log(`change tab to ${idx}...`);
-    this.tabIdx.set(idx);
+    switch (idx) {
+      case 0:
+        this.data.audioPower.set(true);
+        break;
+      case 1:
+        this.data.audioPower.set(false);
+        break;
+      case 2:
+        this.data.audioPower.set(false);
+        break;
+      case 3:
+        this.data.audioPower.set(true);
+        break;
+      case 4:
+        this.data.audioPower.set(true);
+        break;
+      default:
+        this.data.audioPower.set(true);
+        break;
+    }
   }
 
   //-- cancel any web audio stuff and release...
   //
   tabChangeHandler = async () => {
+    this.data.abortPlayback.set(true);
     if (this.data.audioCtx) {
       this.data.audioPower.set(false);
       this.data.oscillator.stop();
@@ -64,5 +85,6 @@ export class App {
     }
     this.data.currentPlayIndex.set(0);
     this.data.currentPlayState.set('stopped');
+    this.changeMainTab(this.tabIdx());
   }
 }

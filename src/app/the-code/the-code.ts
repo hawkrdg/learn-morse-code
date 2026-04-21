@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { GlobalData } from "../services/global-data";
 
 @Component({
   selector: 'app-the-code',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './the-code.scss',
 })
 export class TheCode {
+  data = inject(GlobalData);
 
 }

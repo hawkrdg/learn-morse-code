@@ -8,10 +8,14 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 const themes = [
   'blueGreyTheme',
   'brickTheme',
+  'brownTheme',
   'greenTheme',
   'greyTheme',
+  'lilacTheme',
+  'limeTheme',
   'khakiTheme',
   'oliveTheme',
+  'yellowTheme'
   // 'testTheme'
 ]
 

@@ -4,10 +4,14 @@
 //
 @use "./themes/BlueGreyTheme.scss" as blue-grey-theme;
 @use "./themes/BrickTheme.scss" as brick-theme;
+@use "./themes/BrownTheme.scss" as brown-theme;
 @use "./themes/GreenTheme.scss" as green-theme;
 @use "./themes/GreyTheme.scss" as grey-theme;
+@use "./themes/LilacTheme.scss" as lilac-theme;
+@use "./themes/LimeTheme.scss" as lime-theme;
 @use "./themes/KhakiTheme.scss" as khaki-theme;
 @use "./themes/OliveTheme.scss" as olive-theme;
+@use "./themes/YellowTheme.scss" as yellow-theme;
 
 :root {
   .blueGreyTheme {
@@ -28,6 +32,18 @@
       color: (
         primary: brick-theme.$primary-palette,
         tertiary: brick-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+  
+  .brownTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: brown-theme.$primary-palette,
+        tertiary: brown-theme.$tertiary-palette
       ),
       typography: Roboto,
       density: -1
@@ -58,6 +74,30 @@
     ));
   }
 
+  .lilacTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: lilac-theme.$primary-palette,
+        tertiary: lilac-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+
+  .limeTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: lime-theme.$primary-palette,
+        tertiary: lime-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+
   .khakiTheme {
     color-scheme: light dark;
     @include mat.theme((
@@ -76,6 +116,18 @@
       color: (
         primary: olive-theme.$primary-palette,
         tertiary: olive-theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: -1
+    ));
+  }
+
+  .yellowTheme {
+    color-scheme: light dark;
+    @include mat.theme((
+      color: (
+        primary: yellow-theme.$primary-palette,
+        tertiary: yellow-theme.$tertiary-palette
       ),
       typography: Roboto,
       density: -1

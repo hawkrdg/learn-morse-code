@@ -111,8 +111,9 @@ export class GlobalData {
   interChar;
   charSpace;
   wordSpace;
-  characterMode = this.alphaOptions[0]; //-- refactor out
+  characterMode = this.alphaOptions[0];
 
+  
   //-- util...
   //
   toggleAudioPower = () => {
@@ -127,16 +128,16 @@ export class GlobalData {
       this.audioCtx = null;
     } else {
       this.audioPower.set(true);
-      if (this.audioCtx) {
-        this.audioCtx.resume();
-      } else {
+      // if (this.audioCtx) {
+      //   this.audioCtx.resume();
+      // } else {
         this.audioCtx = new window.AudioContext();
         this.audioCtx.resume();
         this.oscillator = new OscillatorNode(this.audioCtx, {type: 'sine', frequency: 650});
         this.oscillator.start();
         this.gainNode = new GainNode(this.audioCtx, {gain: 0.0});
         this.oscillator.connect(this.gainNode).connect(this.audioCtx.destination);
-      }
+      // }
     }
   }
 
@@ -226,6 +227,18 @@ export class GlobalData {
     await this.delay(this.interChar).then(() => {});
   }
 
+  promisePlayDot = () => {
+    return new Promise((resolve) => {
+      this.gainNode.gain.setValueAtTime(this.volume, 0);
+      setTimeout(() => {
+        this.gainNode.gain.setValueAtTime(0, 0);
+        setTimeout(() => {
+          resolve('OK');
+        }, this.interChar);
+      }, this.dot);
+    })
+  }
+
   playDash = async () => {
     this.gainNode.gain.setValueAtTime(this.volume, 0);
     await this.delay(this.dash).then(() => {});
@@ -233,12 +246,85 @@ export class GlobalData {
     await this.delay(this.interChar).then(() => {});
   }
 
+  promisePlayDash = () => {
+    return new Promise((resolve) => {
+      this.gainNode.gain.setValueAtTime(this.volume, 0);
+      setTimeout(() => {
+        this.gainNode.gain.setValueAtTime(0, 0);
+        setTimeout(() => {
+          resolve('OK');
+        }, this.interChar);
+      }, this.dash);
+    })
+  }
+
+  test1 = async () => {
+    await this.promisePlayDash();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDot();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDot();
+    await this.promisePlayDot();
+    await this.promisePlayDot();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDash();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDot();
+    await this.promisePlayDot();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDash();
+    await this.promisePlayDot();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDash();
+    await this.promisePlayDash();
+    await this.promisePlayDot();
+    await this.promisePlayWordSpace();
+    await this.promisePlayDot();
+    await this.promisePlayDash();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDash();
+    await this.promisePlayDash();
+    await this.promisePlayDot();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDot();
+    await this.promisePlayDash();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDot();
+    await this.promisePlayDot();
+    await this.promisePlayCharSpace()
+    await this.promisePlayDash();
+    await this.promisePlayDot();
+  }
+
+  test2 = async () => {
+    const code = '-|.|...|-^.-|--.|.-|..|-.';
+    for (const c of code) {
+      await this.promisePlaySingleCode(c);
+    }
+  }
+
   playCharSpace = async () => {
     await this.delay(this.charSpace).then(() => {});
   }
 
+  promisePlayCharSpace = () => {
+    return new Promise((resolve) => {
+      setTimeout(()=> {
+        resolve('OK');
+      }, this.charSpace);
+    });
+  }
+
   playWordSpace = async () => {
     await this.delay(this.wordSpace).then(() => {});
+  }
+
+  promisePlayWordSpace = () => {
+    return new Promise((resolve) => {
+      setTimeout(()=> {
+        resolve('OK');
+      }, this.wordSpace);
+    });
   }
 
   playSingleCode = async (str) => {
@@ -264,23 +350,48 @@ export class GlobalData {
     }
   }
 
+  promisePlaySingleCode = async (str) => {
+    if (this.audioCtx.state === 'running') {
+      for (const c of str) {
+        switch (c) {
+          case '.':
+            await this.promisePlayDot();
+            break;
+          case '-':
+            await this.promisePlayDash();
+            break;
+          case '|':
+            await this.promisePlayCharSpace();
+            break;
+          case '^':
+            await this.promisePlayWordSpace();
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+
+
   playCode = async (codeStrArray) => {
     let idx;
-    this.abortPlayback.set(false);
 
     if (this.audioCtx.state === 'suspended') {
       await this.audioCtx.resume();
       this.currentPlayState.set('playing');
     }
 
-    for (const i of this.inputs) {
-      i.value = '';
+    if (this.inputs[0]) {
+      for (const i of this.inputs) {
+        i.value = '';
+      }
     }
 
     for (idx = 0; idx < codeStrArray.length; idx++) {
       this.currentPlayIndex.set(idx);
-      //-- playback paused...
-      //
+
       if (this.currentPlayState() === 'paused') {
         await this.waitForPlayback().then(
           async data => {
@@ -294,6 +405,7 @@ export class GlobalData {
       //
       if( this.abortPlayback()) {
         this.currentPlayState.set('stopped');
+        this.abortPlayback.set(false);
         break
       }
       
@@ -320,6 +432,7 @@ export class GlobalData {
       }
     }
     this.currentPlayIndex.set(0);
+    this.inputs[0].focus();
     this.currentPlayState.set('stopped');
   }
     
@@ -367,9 +480,18 @@ export class GlobalData {
 
     //-- build the string...
     //
+    let previousChar = '';
+    let newChar = '';
+
     for (let b = 0; b < blocks; b++) {
       for (let idx = 0; idx < 5; idx++) {
-        this.sampleText += this.alphabet[this.getRandomAphaIdx(this.alphabet.length)].char;
+        //-- added to prevent duplicate characters...
+        //
+        while (newChar === previousChar) {
+          newChar = this.alphabet[this.getRandomAphaIdx(this.alphabet.length)].char;
+        }
+        previousChar = newChar;
+        this.sampleText += newChar;
       }
       this.sampleText += ' ';
     }

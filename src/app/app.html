@@ -45,7 +45,7 @@
       </mat-tab>
     </mat-tab-group>
 
-    @if (data.audioFlag()) {
+    @if (!data.audioPower()) {
       <div class="noAudio"><h3>Turn on the Audio...!</h3></div>
     }
   

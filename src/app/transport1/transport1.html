@@ -33,9 +33,9 @@
       <mat-icon matTooltip="Play...">play_arrow</mat-icon>
     </button>
  
-    <button matIconButton aria-label="Pause..." [disabled]="!data.audioPower()" (click)="pause()">
+    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayState() === 'stopped'" (click)="pause()">
       @if (data.currentPlayState() === 'paused') {
-        <mat-icon matTooltip="Resume Play...">last_page</mat-icon>
+        <mat-icon matTooltip="Resume Play...">play_arrow</mat-icon>
       } @else {
         <mat-icon matTooltip="Pause...">pause</mat-icon>
       }
