@@ -373,23 +373,21 @@ export class GlobalData {
     }
   }
 
-
-
   playCode = async (codeStrArray) => {
     let idx;
-
     if (this.audioCtx.state === 'suspended') {
       await this.audioCtx.resume();
-      this.currentPlayState.set('playing');
     }
-
+    
     if (this.inputs[0]) {
       for (const i of this.inputs) {
         i.value = '';
       }
     }
-
+    
+    this.currentPlayState.set('playing');
     for (idx = 0; idx < codeStrArray.length; idx++) {
+
       this.currentPlayIndex.set(idx);
 
       if (this.currentPlayState() === 'paused') {
@@ -477,7 +475,6 @@ export class GlobalData {
     }
     this.currentPlayIndex.set(0);
     this.currentPlayState.set('stopped');
-
     //-- build the string...
     //
     let previousChar = '';

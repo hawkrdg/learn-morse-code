@@ -44,10 +44,11 @@ export class Transport1 {
     }  
 
     if (this.data.audioCtx.state === 'suspended') {
-      await this.data.audioCtx.resume();
+      await this.data.audioCtx.resume()
     }
 
     if (this.data.currentPlayState() != 'playing') {
+      this.data.abortPlayback.set(false);
       this.data.currentPlayState.set('playing');
       this.data.currentPlayIndex.set(0);
       setTimeout(() => {

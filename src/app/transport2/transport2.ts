@@ -79,17 +79,17 @@ export class Transport2 {
     }
 
     if (this.data.currentPlayMode() === 'continuous') {
-      if (this.data.currentPlayState() != 'playing') {
-        this.data.currentPlayIndex.set(0);
-        for (const i of this.data.inputs) {
-          i.value = '';
-        }
-        this.data.currentPlayState.set('playing');
-        this.data.inputs[0].focus();
-        setTimeout(() => {
-          this.data.playCode(this.data.sampleTextCode)
-        }, 2000);  
-      }
+      this.data.abortPlayback.set(false);
+      this.data.currentPlayState.set('playing');
+      // await this.data.audioCtx.resume();
+      this.data.currentPlayIndex.set(0);
+      // for (const i of this.data.inputs) {
+      //   i.value = '';
+      // }
+      this.data.inputs[0].focus();
+      setTimeout(() => {
+        this.data.playCode(this.data.sampleTextCode)
+      }, 2000);  
     } else {
       if (this.data.currentPlayState() != 'playing') {
         this.data.abortPlayback.set(true);
