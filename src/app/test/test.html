@@ -20,6 +20,7 @@
           <div class="testCodeBlock">
             <div class="sampleCodeChar" [class.isPlayingCode]="data.currentPlayIndex() === dCnt + (bCnt * 5)">
               <div class="sampleTextLetter" [class.sampleCodeCharHidden]="data.inputs[dCnt + (bCnt * 5)].value === ''">
+              <!-- <div class="sampleTextLetter" [class.sampleCodeCharHidden]="false"> -->
                 {{data.sampleTextArray[dCnt + (bCnt * 5)]}}
               </div>
             </div>

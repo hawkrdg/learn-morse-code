@@ -1,4 +1,4 @@
-import { Component, inject, DOCUMENT } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, DOCUMENT } from '@angular/core';
 
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,12 +27,22 @@ import { Transport1 } from "../transport1/transport1"
 })
 export class Listen {
   data = inject(GlobalData);
+  document = inject(DOCUMENT);
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     console.log(`ngOnInit() fires...`);
   }
   ngAfterViewInit() {
     console.log(`ngAfterViewInit() fires...`);
-    this.data.showNoAudioMsg(3000);
+    this.generateSampleText();
+    this.cdr.detectChanges();
+  }
+
+  generateSampleText = async () => {
+    this.data.generateSampleText(this.data.blockCount)
+    await this.data.delay(1000);
+    this.cdr.detectChanges();
   }
 }

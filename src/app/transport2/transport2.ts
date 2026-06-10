@@ -38,27 +38,24 @@ export class Transport2 {
     }
     this.data.currentPlayState.set('stopped');
     this.data.currentPlayIndex.set(0);
-    for (const i of this.data.inputs) {
-      i.value = '';
-    }
+    // for (const i of this.data.inputs) {
+    //   i.value = '';
+    // }
   }
 
   //-- set focus to first char, if playing 'coninuous', wait 3 seconds before starting...
   //
   replayCode = async () => {
-    if (!this.data.audioCtx) {
-      this.data.showNoAudioMsg(2000);
-    }  
-
     if (this.data.audioCtx.state === 'suspended') {
       await this.data.audioCtx.resume();
     }
     this.data.abortPlayback.set(true);
+
     for (const i of this.data.inputs) {
       i.value = '';
     }
     this.data.inputs[0].focus();
-    this.data.currentPlayIndex.set(0);
+
     setTimeout(() => {
       this.data.currentPlayState.set('playing');
       if (this.data.currentPlayMode() === 'continuous') {
@@ -70,22 +67,29 @@ export class Transport2 {
   }
 
   playCode = async () => {
-    if (!this.data.audioCtx) {
-      this.data.showNoAudioMsg(2000);
-    }  
-
     if (this.data.audioCtx.state === 'suspended') {
       await this.data.audioCtx.resume();
     }
+
+    // if (this.data.currentPlayState() != 'playing') {
+    //   this.data.abortPlayback.set(false);
+    //   this.data.currentPlayState.set('playing');
+    //   this.data.currentPlayIndex.set(0);
+    //   setTimeout(() => {
+    //     this.data.playCode(this.data.sampleTextCode)
+    //   }, 2000);  
+    // }
+
+
 
     if (this.data.currentPlayMode() === 'continuous') {
       this.data.abortPlayback.set(false);
       this.data.currentPlayState.set('playing');
       // await this.data.audioCtx.resume();
       this.data.currentPlayIndex.set(0);
-      // for (const i of this.data.inputs) {
-      //   i.value = '';
-      // }
+      for (const i of this.data.inputs) {
+        i.value = '';
+      }
       this.data.inputs[0].focus();
       setTimeout(() => {
         this.data.playCode(this.data.sampleTextCode)
@@ -113,13 +117,9 @@ export class Transport2 {
   pause = async () => {
     if (this.data.currentPlayState() === 'paused') {
       this.data.currentPlayState.set('playing');
-      if (this.data.audioCtx) {
-        this.data.audioCtx.resume();
-      }
+      await this.data.audioCtx.resume();
     } else {
-      if (this.data.audioCtx) {
-        this.data.audioCtx.suspend();
-      }
+      this.data.audioCtx.suspend();
       this.data.currentPlayState.set('paused');
     }
   }

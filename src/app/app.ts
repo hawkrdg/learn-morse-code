@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, DOCUMENT } from '@angular/core';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -30,12 +30,18 @@ import { About } from "./about/about";
 })
 export class App {
   protected readonly title = signal('Learn Morse Code');
+  document = inject(DOCUMENT);
+  window = document.defaultView;
   data = inject(GlobalData);
   tabIdx = signal(1);
   playMode;
 
   ngOnInit() {
     console.log(`ngOnInit() fires...`);
+    if (!this.data.audioCtx) {
+      this.data.audioCtx = new window.AudioContext();
+    }
+    this.data.generateSampleText(this.data.blockCount);
   }
 
   ngAfterViewInit() {
@@ -58,7 +64,7 @@ export class App {
         this.data.audioPower.set(false);
         break;
       case 3:
-        this.data.audioPower.set(true);
+        this.data.audioPower.set(false);
         break;
       case 4:
         this.data.audioPower.set(true);
@@ -72,19 +78,19 @@ export class App {
   //-- cancel any web audio stuff and release...
   //
   tabChangeHandler = async () => {
-    this.data.abortPlayback.set(true);
-    if (this.data.audioCtx) {
-      this.data.audioPower.set(false);
-      this.data.oscillator.stop();
-      this.data.oscillator.disconnect();
-      this.data.gainNode.disconnect();
-      this.data.audioCtx.close();
-      this.data.gainNode = null;
-      this.data.oscillator = null;
-      this.data.audioCtx = null;
-    }
-    this.data.currentPlayIndex.set(0);
-    this.data.currentPlayState.set('stopped');
+    // this.data.abortPlayback.set(true);
+    // if (this.data.audioCtx) {
+    //   this.data.audioPower.set(false);
+    //   this.data.oscillator.stop();
+    //   this.data.oscillator.disconnect();
+    //   this.data.gainNode.disconnect();
+    //   this.data.audioCtx.close();
+    //   this.data.gainNode = null;
+    //   this.data.oscillator = null;
+    //   this.data.audioCtx = null;
+    // }
+    // this.data.currentPlayIndex.set(0);
+    // this.data.currentPlayState.set('stopped');
     this.changeMainTab(this.tabIdx());
   }
 }

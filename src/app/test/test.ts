@@ -1,4 +1,4 @@
-import { Component, inject, model, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, DOCUMENT, ChangeDetectorRef } from '@angular/core';
 
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,11 +30,17 @@ import { Transport2 } from "../transport2/transport2";
 })
 export class Test {
   data = inject(GlobalData);
-  
+  document = inject(DOCUMENT);
+
   constructor(private cdr: ChangeDetectorRef) {}  
   
+  ngOnInit() {
+    console.log(`ngOnInit() fires...`);
+    this.data.inputs = this.document.getElementsByClassName('userTestInput');
+  }
+  
   ngAfterViewInit() {
-    this.data.sampleText = '';
+    // this.data.sampleText = '';
     this.generateSampleText();
   }
 
@@ -63,13 +69,6 @@ export class Test {
   
 
   generateSampleText = async () => {
-    //-- make sure any playback is stopped...
-    //
-    await this.data.audioCtx.suspend();
-
-    //-- get new sample text...
-    //
-    this.data.sampleText = '';
     this.data.generateSampleText(this.data.blockCount)
     
     //-- clear testing inputs and set focus to start...

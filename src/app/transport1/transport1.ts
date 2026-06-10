@@ -24,10 +24,6 @@ export class Transport1 {
   data = inject(GlobalData);
 
   replayCode = async () => {
-    if (!this.data.audioCtx) {
-      this.data.showNoAudioMsg(2000);
-    }  
-
     if (this.data.audioCtx.state === 'suspended') {
       await this.data.audioCtx.resume();
     }
@@ -39,10 +35,6 @@ export class Transport1 {
   }
   
   playCode = async () => {
-    if (!this.data.audioCtx) {
-      this.data.showNoAudioMsg(2000);
-    }  
-
     if (this.data.audioCtx.state === 'suspended') {
       await this.data.audioCtx.resume()
     }
@@ -60,13 +52,9 @@ export class Transport1 {
   pause = async () => {
     if (this.data.currentPlayState() === 'paused') {
       this.data.currentPlayState.set('playing');
-      if (this.data.audioCtx) {
-        this.data.audioCtx.resume();
-      }
+      await this.data.audioCtx.resume();
     } else {
-      if (this.data.audioCtx) {
-        this.data.audioCtx.suspend();
-      }
+      this.data.audioCtx.suspend();
       this.data.currentPlayState.set('paused');
     }
   }

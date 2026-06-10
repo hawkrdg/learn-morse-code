@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, DOCUMENT } from '@angular/core';
+import { Injectable, signal, inject, ChangeDetectorRef, DOCUMENT } from '@angular/core';
 
 const alphaOptions = [
   {display: 'Alpha Only ', mode: 'alpha'},
@@ -82,7 +82,7 @@ const punctuationCode2 = [
 export class GlobalData {
   document = inject(DOCUMENT);
   window = document.defaultView;
-  inputs: any = this.document.getElementsByClassName('userTestInput');
+  inputs;
   alphabet = alphaCode;
   alphaOptions = alphaOptions;
   sampleText = '';
@@ -113,25 +113,26 @@ export class GlobalData {
   wordSpace;
   characterMode = this.alphaOptions[0];
 
-  
+  // constructor(private cdr: ChangeDetectorRef) {}
+
   //-- util...
   //
   toggleAudioPower = () => {
     if (this.audioPower()) {
       this.audioPower.set(false);
+      this.audioCtx.suspend();
       this.oscillator.stop();
       this.oscillator.disconnect();
       this.gainNode.disconnect();
-      this.audioCtx.close();
-      this.gainNode = null;
-      this.oscillator = null;
-      this.audioCtx = null;
+      // this.gainNode = null;
+      // this.oscillator = null;
+      // this.audioCtx = null;
     } else {
       this.audioPower.set(true);
       // if (this.audioCtx) {
       //   this.audioCtx.resume();
       // } else {
-        this.audioCtx = new window.AudioContext();
+        // this.audioCtx = new window.AudioContext();
         this.audioCtx.resume();
         this.oscillator = new OscillatorNode(this.audioCtx, {type: 'sine', frequency: 650});
         this.oscillator.start();
@@ -139,16 +140,30 @@ export class GlobalData {
         this.oscillator.connect(this.gainNode).connect(this.audioCtx.destination);
       // }
     }
+    // if (this.audioCtx) {
+    //   this.audioPower.set(false);
+    //   this.oscillator.stop();
+    //   this.oscillator.disconnect();
+    //   this.gainNode.disconnect();
+    //   this.audioCtx.close();
+    //   this.gainNode = null;
+    //   this.oscillator = null;
+    //   this.audioCtx = null;
+    // } else {
+    //   this.audioPower.set(true);
+    //   // if (this.audioCtx) {
+    //   //   this.audioCtx.resume();
+    //   // } else {
+    //     this.audioCtx = new window.AudioContext();
+    //     this.audioCtx.resume();
+    //     this.oscillator = new OscillatorNode(this.audioCtx, {type: 'sine', frequency: 650});
+    //     this.oscillator.start();
+    //     this.gainNode = new GainNode(this.audioCtx, {gain: 0.0});
+    //     this.oscillator.connect(this.gainNode).connect(this.audioCtx.destination);
+    //   // }
+    // }
   }
 
-  //-- alert user to turn on audio...
-  //
-  showNoAudioMsg = (ms) => {
-    this.audioFlag.set(true);
-    setTimeout(() => {
-      this.audioFlag.set(false);
-    }, ms);
-  }
   
   updateWPM = () => {
     this.dot = 1200 / this.wpm;
@@ -194,7 +209,7 @@ export class GlobalData {
     this.generateSampleText(this.blockCount);
   }
 
-  //-- this promise will not resolve until audioCtx.state = 'running'...
+  //-- this promise will not resolve until currentPlayState = 'playing'...
   //   polls every 500ms
   //
   waitForPlayback = () => {
@@ -204,10 +219,11 @@ export class GlobalData {
       } else {
         const intervalId = setInterval(() => {
           if (this.currentPlayState() === 'playing') {
+            console.log(`waitForPlayback() resolves...`);
             resolve(true);
             clearInterval(intervalId);
           }
-        }, 100);
+        }, 500);
       }
     });
   }
@@ -256,51 +272,6 @@ export class GlobalData {
         }, this.interChar);
       }, this.dash);
     })
-  }
-
-  test1 = async () => {
-    await this.promisePlayDash();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDot();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDot();
-    await this.promisePlayDot();
-    await this.promisePlayDot();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDash();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDot();
-    await this.promisePlayDot();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDash();
-    await this.promisePlayDot();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDash();
-    await this.promisePlayDash();
-    await this.promisePlayDot();
-    await this.promisePlayWordSpace();
-    await this.promisePlayDot();
-    await this.promisePlayDash();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDash();
-    await this.promisePlayDash();
-    await this.promisePlayDot();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDot();
-    await this.promisePlayDash();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDot();
-    await this.promisePlayDot();
-    await this.promisePlayCharSpace()
-    await this.promisePlayDash();
-    await this.promisePlayDot();
-  }
-
-  test2 = async () => {
-    const code = '-|.|...|-^.-|--.|.-|..|-.';
-    for (const c of code) {
-      await this.promisePlaySingleCode(c);
-    }
   }
 
   playCharSpace = async () => {
@@ -393,7 +364,7 @@ export class GlobalData {
       if (this.currentPlayState() === 'paused') {
         await this.waitForPlayback().then(
           async data => {
-            if (this.inputs.length > 0) {
+            if (Object.keys(this.inputs).length > 0) {
               this.inputs[this.currentPlayIndex()].focus();
             }
           }
@@ -402,7 +373,13 @@ export class GlobalData {
       //-- abort if some other event wants to stop playback...
       //
       if( this.abortPlayback()) {
-        this.currentPlayState.set('stopped');
+        console.log(`ABORTING PLAYBACK...`);
+        if (this.currentPlayState() === 'paused') {
+          this.currentPlayState.set('playing');
+          await this.audioCtx.resume();
+        }
+        await this.audioCtx.suspend();
+        // this.currentPlayState.set('stopped');
         this.abortPlayback.set(false);
         break
       }
@@ -430,7 +407,9 @@ export class GlobalData {
       }
     }
     this.currentPlayIndex.set(0);
-    this.inputs[0].focus();
+    if (this.inputs[0]) {
+      this.inputs[0].focus();
+    }
     this.currentPlayState.set('stopped');
   }
     
@@ -465,21 +444,25 @@ export class GlobalData {
   //   sampleSingleTextCode[] - strip '^' for single character playback
   //
   generateSampleText = async (blocks) => {
+  // generateSampleText = (blocks) => {
     this.sampleText = '';
 
     //-- clean up any current playback...
-    //
-    this.abortPlayback.set(true);
-    if (this.audioCtx) {
-      await this.audioCtx.suspend();
+    //   cancel any pauses, stop any playback
+    if (this.currentPlayState() === 'paused') {
+      console.log(`generateSampleText() unpausing...`);
+      this.currentPlayState.set('playing');
+      await this.audioCtx.resume();
+      this.abortPlayback.set(true);
+      await this.delay(500);
     }
-    this.currentPlayIndex.set(0);
-    this.currentPlayState.set('stopped');
-    //-- build the string...
-    //
+    if (this.currentPlayState() === 'playing') {
+      console.log(`generateSampleText() aborting...`);
+      this.abortPlayback.set(true);
+    }
     let previousChar = '';
     let newChar = '';
-
+    
     for (let b = 0; b < blocks; b++) {
       for (let idx = 0; idx < 5; idx++) {
         //-- added to prevent duplicate characters...
@@ -492,13 +475,13 @@ export class GlobalData {
       }
       this.sampleText += ' ';
     }
-
+    
     //-- setup all the props...
     //
     this.sampleText = this.sampleText.trim();
     
     const rawTextCode = this.tokenizeString(this.sampleText);
-
+    
     this.sampleTextCode = [];
     this.sampleSingleTextCode = [];
     rawTextCode.forEach(c => {
@@ -507,7 +490,7 @@ export class GlobalData {
         this.sampleSingleTextCode.push(c);
       }
     });
-
+    
     rawTextCode.forEach((c, idx) => {
       if (c === '^') {
         this.sampleTextCode[idx - (idx %5) - 1] += '^';
@@ -515,15 +498,21 @@ export class GlobalData {
     });
     // this.sampleTextCode = this.tokenizeString(this.sampleText);
     
-    for (const i of this.inputs) {
-      i.value = '';
+    if (this.inputs) {
+      for (const i of this.inputs) {
+        i.value = '';
+      }
     }
+
     this.sampleText = this.sampleText.replaceAll(' ', '');
     this.sampleTextArray = [...this.sampleText];
-
+    
     this.blockCountIndex = [];
     for (let i = 0; i < this.blockCount; i++) {
       this.blockCountIndex.push(i);
     }
+    this.currentPlayIndex.set(0);
+    this.currentPlayState.set('stopped');
+    console.log(`generateSampeText() - state - ${this.audioCtx.state}, abortPlayback - ${this.abortPlayback()}`)
   }
 }
