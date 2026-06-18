@@ -33,9 +33,11 @@
       </mat-tab>
       
       <mat-tab label="Test Your Fist">
-        <div class="mainContent">
-          <app-send></app-send>
-        </div>
+        <ng-template matTabContent>
+          <div class="mainContent">
+            <app-send></app-send>
+          </div>
+        </ng-template>
       </mat-tab>
     
       <mat-tab label="About">

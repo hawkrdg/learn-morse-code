@@ -24,6 +24,7 @@ body {
 
 * {
 	box-sizing: border-box;
+  border-collapse: collapse;
 }
 
 button {
@@ -131,6 +132,9 @@ div {
 
 //-- material component fixes
 //
+mat-tab-header {
+  height: 50px !important;
+}
 mat-label {
   font-weight: bold;
   font-size: 12px;

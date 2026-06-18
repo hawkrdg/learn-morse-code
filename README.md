@@ -19,7 +19,7 @@ the app has four different alphabets:
 Choose these from the 'Choose the Alphabet...' drop-down - there are a number of combinations. Learning all four will take some time but once you feel comfortable, choosing 'All' will generate a random mix of everything... 
 
 ### The 'Generate' Button
-This button will generate a ten block set of random characters based on the chosen alphabet. The same blocks are used both for listening and testing so you can listen to a set of blocks and then test yourself against them.
+This button will generate a block set of random characters based on the chosen alphabet. You can listen and test over and over or generate a new set of characters.
 
 ### The Audio Transports
 This app's audio uses the Web Audio API for all sound. This can be resource intensive so it is only instantiated when needed so as not to 'hog' resources from other web pages. You must turn it on to listen, test, or send. It is turned off for any 'Tab Change' event. Once the audio is turned on, the play buttons will be enabled.
@@ -41,7 +41,12 @@ All the characters are hidden until you enter what you think you heard. The curs
   * 'Replay' will restart playing from the beginning in 'continuous' mode or will replay the current character in 'single' mode...
 
 ### Test Your Fist
-This module is still under development...
+here you can use your keyboard to send code. The program needs to know your speed so you must run the speed test first - try and key at your normal speed. The program will set up thresholds for guessing your code.
+
+When running the test, consider each block a separate word - this will set both your 'between char' and 'between word' timing. The test needs one last key stroke after the last character to end. It will then analyze your code and give you some, hopefully useful, feedback. The most useful result is, perhaps, the standard deviation. Anything under 30 is pretty good. This metric yields a view of where your code is, perhaps, a bit sloppy.
+
+The test can become confused if a tone or space is outside thresholds - you can cancel at any time and restart or generate new text.
+
 
 ### Suggestions...
 Start out with just the letters. When you think you know the code find a 'continuous' WPM speed that you can mostly get all the characters correctly. Practice in 'single' mode at 10 to 12 WPM. Gradually work up your 'continuous' speed to say 12 WPM. Now add the numbers and again work up your 'continuous' speed. Now add the puncuation.
@@ -56,4 +61,4 @@ https://hawkrdg.com/morsecode
 Feel free to check it out and use it...
 
 ### Build Info...
-I use a 'monorepo' workspace - all my apps are within a single 'projects' folder and share resources. Included is my 'package.json' file with the handful of outside dependencies that I use. This may be helpful in cloning this app into a single workspace...
+The repo is at https://github.com/hawkrdg/learn-morse-code. This is an Angular / Material app - feel free to clone and build it. I use a 'monorepo' workspace - all my apps are within a single 'projects' folder and share resources. Included is my 'package.json' file with the handful of outside dependencies that I use. This may be helpful in cloning this app into a single workspace...

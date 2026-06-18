@@ -25,25 +25,8 @@
   </div>
 
   <div class="controlContainer">
-    <button matIconButton aria-label="Replay..." [disabled]="data.currentPlayState() === 'paused' || !data.audioPower()" (click)="replayCode()">
-      <mat-icon matTooltip="Replay..." matTooltipPosition="below">skip_previous</mat-icon>
-    </button>
- 
-    <button matIconButton aria-label="Play..." [disabled]="data.currentPlayState() === 'paused' || data.currentPlayState() === 'playing' || !data.audioPower()" (click)="playCode()">
-      <mat-icon matTooltip="Play...">play_arrow</mat-icon>
-    </button>
- 
-    <button matIconButton aria-label="Pause..." [disabled]="data.currentPlayState() === 'stopped' || data.currentPlayState() === 'suspended'" (click)="pause()">
-      @if (data.currentPlayState() === 'paused') {
-        <mat-icon matTooltip="Resume Play...">play_arrow</mat-icon>
-      } @else {
-        <mat-icon matTooltip="Pause...">pause</mat-icon>
-      }
+    <button matIconButton aria-label="Cancel..." (click)="cancelTest()">
+      <mat-icon matTooltip="Cancel The Test...">cancel</mat-icon>
     </button>
   </div>
 </div>
-
-<!-- @if (data.audioFlag()) {
-  <div class="noAudio"><h3>Turn on the Audio...!</h3></div>
-} -->
-

@@ -84,17 +84,20 @@ export class GlobalData {
   window = document.defaultView;
   inputs;
   alphabet = alphaCode;
+  testAlphabet = alphaCode;
   alphaOptions = alphaOptions;
   sampleText = '';
   sampleTextArray = []
   sampleTextCode = [];
   sampleSingleTextCode = [];
-  blockCount = 10;
-  blockCountIndex = [];
+  blockCount = 6;
+  blockCountIndex = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   currentPlayMode = signal('continuous')
   currentPlayState = signal('suspended')
   currentPlayIndex = signal(0);
   abortPlayback = signal(false);
+  cancelCodeTest = signal(false);
+  cancelPromise = signal(false);
   audioFlag = signal(false);
   
   //-- tone generator...
@@ -102,7 +105,7 @@ export class GlobalData {
   audioCtx = null;
   oscillator = null;
   gainNode = null;
-  volume = 0.05;
+  volume = 0.1;
 
   //-- code stuff (dot.ms = 1200/wpm)
   wpm = 10;
@@ -209,7 +212,7 @@ export class GlobalData {
     this.generateSampleText(this.blockCount);
   }
 
-  //-- this promise will not resolve until currentPlayState = 'playing'...
+   //-- this promise will not resolve until currentPlayState = 'playing'...
   //   polls every 500ms
   //
   waitForPlayback = () => {

@@ -1,4 +1,174 @@
-<div class="underConstruction">
+<!-- <div class="underConstruction">
   <h1 class="underConstructionBanner">Test Your Fist...</h1>
   <img src="under-construction.gif">
+</div> -->
+
+<div class="controlBar">
+  <mat-form-field floatLabel="always" class="selAlphabet">
+    <mat-label>Choose the Alphabet...</mat-label>
+    <mat-select #selAlphabet panelClass="'panel'" [(value)]="data.characterMode" (selectionChange)="data.updateAlphabet($event.value)">
+      @for (alpha of data.alphaOptions; track $index; let idx = $index) {
+        <mat-option [value]="alpha">{{alpha.display}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button class="generateText" matTooltip="Generate Random Characters..." (click)="generateSampleText()">
+    Generate
+  </button>
+  <app-transport3></app-transport3>
+</div>
+
+<div class="content">
+  <div class="testBlock">
+    <div class="speedTestBlock">
+			<div class="speedTestControl">
+				<h3>
+          Key In The Test Block To Set Your Speed
+          <button mat-raised-button [disabled]="testIsRunning() || !data.audioPower()" (click)="startSpeedTest()">Start Test</button>
+        </h3>
+			</div>
+			<div class="testTextDisplay">
+				@for (ch of testString; track $index; let idx = $index) {
+					<div class="testTextCharBlock" [class]="ch.isRead() ? 'testCharIsRead' : 'testCharNotRead'">{{ch.char}}</div>
+					@if (idx === 4) {
+						<div class="spacer"></div>
+					}
+				}
+			</div>
+    </div>  
+
+		<div class="keyBlock">
+			<h2>Your speed is {{testWPM}}</h2>
+			<div id="key" tabindex="0" class="key" [class]="{keyIsDown: keyIsDown(), transparent: !testIsRunning()}" (keydown)="onKeyDown($event)" (keyup)="onKeyUp($event)">KEY
+			</div>
+		</div>
+
+    <div class="codeTestButton">
+      <button mat-raised-button [disabled]="testIsRunning() || !data.audioPower() || testWPM === 0" (click)="startCodeTest()">
+        Start Test
+      </button>
+      <div class="spacer"></div>
+      DOT - {{this.dotAvg.toFixed()}} ms
+      DASH - {{this.dashAvg.toFixed()}} ms
+    </div>
+
+    <div class="codeTestBlock">
+      @for (bCnt of data.blockCountIndex; track bCnt) {
+        <div class="codeWordBlock">
+          @for (dCnt of [0, 1, 2, 3, 4]; track dCnt) {
+            <div class="codeCharBlock">
+    					<div class="codeTextCharBlock">
+                {{codeString[bCnt * 5 + dCnt].char}}
+              </div> 
+    					<div id="codeResult{{bCnt * 5 + dCnt}}" class="codeTextCharBlock" [class.currentCodeChar]="codeIdx() === bCnt * 5 + dCnt">
+                {{codeResultString[bCnt * 5 + dCnt]}}
+              </div> 
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="results">
+  	<!-- <h3>Test Results: {{WPM}} WPM</h3> -->
+  	<h3>Test Results: {{data.cancelCodeTest() ? 'CANCELLED!' : WPM.toFixed() + ' WPM'}}</h3>
+  	<div class="resultBlock dotsResults">
+  		<h3>Dot Results...</h3>
+  		<div class="result">
+  			<p>Average</p>
+  			<p>{{dotAvg.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Minimum</p>
+  			<p>{{dotMin.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Maximum</p>
+  			<p>{{dotMax.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Std. Deviation</p>
+  			<p>{{dotStdDev.toFixed(2)}}</p>
+  		</div>
+  	</div>
+  
+  	<div class="resultBlock dashesResults">
+  		<h3>Dashes Results...</h3>
+  		<div class="result">
+  			<p>Average</p>
+  			<p>{{dashAvg.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Minimum</p>
+  			<p>{{dashMin.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Maximum</p>
+  			<p>{{dashMax.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Std. Deviation</p>
+  			<p>{{dashStdDev.toFixed(2)}}</p>
+  		</div>
+  	</div>
+  
+  	<div class="resultBlock interCharsResults">
+  		<h3>InterCharacter Results...</h3>
+  		<div class="result">
+  			<p>Average</p>
+  			<p>{{interCharAvg.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Minimum</p>
+  			<p>{{interCharMin.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Maximum</p>
+  			<p>{{interCharMax.toFixed()}}</p>
+  		</div>
+  		<div class="result">
+  			<p>Std. Deviation</p>
+  			<p>{{interCharStdDev.toFixed(2)}}</p>
+  		</div>
+  	</div>
+  	<div class="resultBlock betweenCharsResults">
+  		<h3>between Character Results...</h3>
+  		<div class="result">
+  			<p>Average</p>
+  			<p>{{betweenCharAvg.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Minimum</p>
+  			<p>{{betweenCharMin.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Maximum</p>
+  			<p>{{betweenCharMax.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Std. Deviation</p>
+  			<p>{{betweenCharStdDev.toFixed(2)}}</p>
+  		</div>
+  	</div>
+  	<div class="resultBlock betweenWordsResults">
+  		<h3>Between Word Results...</h3>
+  		<div class="result">
+  			<p>Average</p>
+  			<p>{{betweenWordAvg.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Minimum</p>
+  			<p>{{betweenWordMin.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Maximum</p>
+  			<p>{{betweenWordMax.toFixed()}} ms</p>
+  		</div>
+  		<div class="result">
+  			<p>Std. Deviation</p>
+  			<p>{{betweenWordStdDev.toFixed(2)}}</p>
+  		</div>
+  	</div>
+  </div>
 </div>
