@@ -1,4 +1,4 @@
-import { Component, inject, DOCUMENT, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, DOCUMENT, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,7 @@ import { Transport2 } from "../transport2/transport2";
         Transport2,
   ],
   templateUrl: './test.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './test.scss',
 })
 export class Test {

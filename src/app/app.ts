@@ -1,4 +1,4 @@
-import { Component, signal, inject, DOCUMENT } from '@angular/core';
+import { Component, signal, inject, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -26,6 +26,7 @@ import { About } from "./about/about";
     About
 ],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss'
 })
 export class App {

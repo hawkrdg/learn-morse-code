@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef, DOCUMENT } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,6 +23,7 @@ import { Transport1 } from "../transport1/transport1"
         Transport1
   ],
   templateUrl: './listen.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './listen.scss',
 })
 export class Listen {

@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, FormControl } from "@angular/forms";
 
 import { MatButtonModule } from '@angular/material/button'; 
@@ -18,6 +18,7 @@ import { GlobalData } from "../services/global-data";
     MatSliderModule
   ],
   templateUrl: './transport1.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transport1.scss',
 })
 export class Transport1 {

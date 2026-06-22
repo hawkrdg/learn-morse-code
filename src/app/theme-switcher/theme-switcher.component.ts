@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from '@angular/material/button'; 
@@ -32,6 +32,7 @@ const themes = [
     // C1Component
   ],
   templateUrl: './theme-switcher.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './theme-switcher.component.scss'
 })
 export class ThemeSwitcherComponent {

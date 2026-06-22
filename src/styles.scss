@@ -19,7 +19,6 @@ body {
   overflow-x: hidden;
   background-color: var(--mat-sys-surface-container);
   color: var(--mat-sys-secondary);
-  font-family: 'AlegreyaSans';
 }
 
 * {
@@ -96,66 +95,4 @@ input {
 
 div {
   border-color: var(--mat-sys-primary) !important;
-}
-
-//-- material component overrides - this will be app-specific...
-//
-* {
-  @include mat.tabs-overrides((
-    active-indicator-color: var(--mat-sys-primary),
-    active-indicator-height: 5px,
-    divider-color: var(--mat-sys-outline),
-    divider-height: 3px,
-    inactive-label-text-color: var(--mat-sys-outline),
-    active-label-text-color: var(--mat-sys-primary),
-    inactive-focus-label-text-color: var(--mat-sys-primary),
-    inactive-hover-label-text-color: var(--mat-sys-primary),
-    // active-hover-label-text-color: var(--mat-sys-error),
-    active-focus-indicator-color: var(--mat-sys-primary),
-    // active-hover-indicator-color: var(--mat-sys-error),
-  ));
-  @include mat.toolbar-overrides((
-    container-background-color: var(--mat-sys-primary),
-    container-text-color: var(--mat-sys-on-primary),
-    title-text-size: xx-large
-  ));
-  @include mat.select-overrides((
-    // panel-background-color: light-dark(var(--mat-sys-primary), var(--mat-sys-on-background))
-    panel-background-color: var(--mat-sys-surface-container),
-  ));
-  @include mat.slider-overrides((
-    active-track-height: 8px,
-    inactive-track-height: 8px,
-    inactive-track-color: rgb(98, 98, 100) !important
-  ));
-}
-
-//-- material component fixes
-//
-mat-tab-header {
-  height: 50px !important;
-}
-mat-label {
-  font-weight: bold;
-  font-size: 12px;
-  color: var(--mat-sys-primary);
-}
-
-mat-slider {
-  min-width: 80px !important;
-}
-.mat-mdc-select-panel {
-  max-height: 400px !important;
-}
-
-button {
-  color: var(--mat-sys-on-primary-container) !important;
-  background-color: var(--mat-sys-surface-variant) !important;
-}
-
-.mdc-icon-button {
-  height: 24px !important;
-  width: 24px !important;
-  margin-top: 10px !important;
-  padding: 0 !important;
 }

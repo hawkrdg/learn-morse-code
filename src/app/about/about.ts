@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { GlobalData } from "../services/global-data";
 
 @Component({
@@ -6,6 +6,7 @@ import { GlobalData } from "../services/global-data";
   imports: [
   ],
   templateUrl: './about.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './about.scss',
 })
 export class About {

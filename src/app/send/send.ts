@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild, DOCUMENT, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, ViewChild, DOCUMENT, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,6 +40,7 @@ const testString = [
         Transport3,
   ],
   templateUrl: './send.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './send.scss',
 })
 export class Send {

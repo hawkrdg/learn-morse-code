@@ -1,4 +1,4 @@
-import { Component, input, model, inject } from '@angular/core';
+import { Component, input, model, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 
 import { MatButtonModule } from '@angular/material/button'; 
@@ -20,6 +20,7 @@ import { GlobalData } from "../services/global-data";
     MatRadioModule
   ],
   templateUrl: './transport3.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transport3.scss',
 })
 export class Transport3 {
